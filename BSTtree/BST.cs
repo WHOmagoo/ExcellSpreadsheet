@@ -1,3 +1,5 @@
+using System;
+
 namespace DefaultNamespace
 {
     public class BST
@@ -42,17 +44,17 @@ namespace DefaultNamespace
             }
         }
 
-        private void getChildrenCount()
+        private int getChildrenCount()
         {
-            int childrenCount = 0;
+            int childrenCount = 1;
             if (left != null)
             {
-                childrenCount += left.getChildrenCount() + 1;
+                childrenCount += left.getChildrenCount();
             }
 
             if (right != null)
             {
-                childrenCount += right.getChildrenCount() + 1;
+                childrenCount += right.getChildrenCount();
             }
 
             return childrenCount;
@@ -79,7 +81,7 @@ namespace DefaultNamespace
                 heightR = right.depth();
             }
 
-            return Math.max(heightL, heightR);
+            return Math.Max(heightL, heightR) + 1;
         }
 
         public int getValue()
@@ -91,21 +93,21 @@ namespace DefaultNamespace
         {
             if (left != null)
             {
-                left.print();
+                left.printSorted();
             }
 
             Console.WriteLine(value);
 
             if (right != null)
             {
-                right.print();
+                right.printSorted();
             }
         }
 
         public void printStats()
         {
-            System.Console.WriteLine("Number of items = " childrenCount() + 1);
-            System.Console.WriteLine();
+            System.Console.WriteLine("Number of items = " + getChildrenCount());
+            System.Console.WriteLine("Maximum Depth = " + depth());
         }
     }
 }
