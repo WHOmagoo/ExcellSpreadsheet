@@ -1,6 +1,6 @@
 using System;
 
-namespace DefaultNamespace
+namespace BSTtree
 {
     public class Program
     {

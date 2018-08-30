@@ -5,6 +5,7 @@
     <e p="/app" t="IncludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeFlat">
       <e p="BSTtree" t="IncludeRecursive">
+        <e p="BST.cs" t="Include" />
         <e p="BSTtree.csproj" t="IncludeRecursive" />
         <e p="Program.cs" t="Include" />
         <e p="Properties" t="Include">
