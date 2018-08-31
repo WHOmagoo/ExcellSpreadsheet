@@ -44,25 +44,20 @@ namespace BSTtree
             }
         }
 
-        private int getChildrenCount()
+        private int Count()
         {
-            int childrenCount = 1;
+            int count = 1;
             if (left != null)
             {
-                childrenCount += left.getChildrenCount();
+                count += left.Count();
             }
 
             if (right != null)
             {
-                childrenCount += right.getChildrenCount();
+                count += right.Count();
             }
 
-            return childrenCount;
-        }
-
-        public int Count()
-        {
-            return getChildrenCount() + 1;
+            return count;
         }
 
         public int depth()
@@ -104,10 +99,16 @@ namespace BSTtree
             }
         }
 
+        public int getOptimalDepth()
+        {
+            return (int) Math.Ceiling(Math.Log(Count(), 2));
+        }
+
         public void printStats()
         {
-            System.Console.WriteLine("Number of items = " + getChildrenCount());
+            System.Console.WriteLine("Number of items = " + Count());
             System.Console.WriteLine("Maximum Depth = " + depth());
+            System.Console.WriteLine("Optimal Depth possible for " + Count() + " items: " + getOptimalDepth());
         }
     }
 }
