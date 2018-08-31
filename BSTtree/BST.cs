@@ -63,8 +63,8 @@ namespace BSTtree
         public int depth()
         {
 
-            int heightL = -1;
-            int heightR = -1;
+            int heightL = 0;
+            int heightR = 0;
             
             if (left != null)
             {
@@ -91,7 +91,7 @@ namespace BSTtree
                 left.printSorted();
             }
 
-            Console.WriteLine(value);
+            Console.Write(value + ", ");
 
             if (right != null)
             {
@@ -101,7 +101,7 @@ namespace BSTtree
 
         public int getOptimalDepth()
         {
-            return (int) Math.Ceiling(Math.Log(Count(), 2));
+            return (int) Math.Ceiling(Math.Log(Count() + 1, 2));
         }
 
         public void printStats()

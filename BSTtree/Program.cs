@@ -4,43 +4,35 @@ namespace BSTtree
 {
     public class Program
     {
-
-        private static readonly int size = 20;
         
         public static void Main(string[] args)
         {
-            Random rand = new Random();
-            int[] nums = new int[size];
-
-
-            nums = randomizeInput(size);
-            nums = parseInput("12 34 65  87 99 lasjdflk 209 493");
-
-            Console.WriteLine("Here we go!");
+            Console.WriteLine("Please enter an arbitrary amount of integers separated by spaces.");
             
-            foreach (var i in nums)
-            {
-                Console.WriteLine(i);
-            }
+            String response = Console.ReadLine();
 
-            Console.WriteLine("Press any key to continue");
-            Console.ReadLine();
+            int[] nums = parseInput(response);
             
             BST root = new BST(nums[0]);
             
-            for (int i = 1; i < size; i++)
+            for (int i = 1; i < nums.Length; i++)
             {
                 root.add(new BST(nums[i]));
             }
 
+            Console.WriteLine("The numbers are: ");
+            
             foreach (int num in nums)
             {
                 Console.Write(num + ", ");
             }
 
-            Console.WriteLine();
+            Console.Write("\n\nHere are the numbers in sorted order: ");
             
             root.printSorted();
+
+            Console.WriteLine();
+            
             root.printStats();
         }
 
