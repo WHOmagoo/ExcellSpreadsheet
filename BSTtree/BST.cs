@@ -44,7 +44,7 @@ namespace BSTtree
             }
         }
 
-        private int Count()
+        public int Count()
         {
             int count = 1;
             if (left != null)
