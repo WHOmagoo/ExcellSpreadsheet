@@ -1,0 +1,5 @@
+C:\Users\WHOmagoo\RiderProjects\cs321-hmcgough\cs321-hmcgough\WinForms\bin\Debug\WinForms.exe
+C:\Users\WHOmagoo\RiderProjects\cs321-hmcgough\cs321-hmcgough\WinForms\bin\Debug\WinForms.pdb
+C:\Users\WHOmagoo\RiderProjects\cs321-hmcgough\cs321-hmcgough\WinForms\obj\Debug\WinForms.csprojResolveAssemblyReference.cache
+C:\Users\WHOmagoo\RiderProjects\cs321-hmcgough\cs321-hmcgough\WinForms\obj\Debug\WinForms.exe
+C:\Users\WHOmagoo\RiderProjects\cs321-hmcgough\cs321-hmcgough\WinForms\obj\Debug\WinForms.pdb
