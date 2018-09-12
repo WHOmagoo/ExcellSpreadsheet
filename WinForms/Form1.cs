@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace WinForms
 {
@@ -11,6 +13,8 @@ namespace WinForms
         
         private ArrayList texts = new ArrayList();
         private int textsCount = 0;
+        private TextBox textView = new TextBox();
+        private string text = "";
         
         public Form1()
         {
@@ -19,6 +23,13 @@ namespace WinForms
 
         private void InitializeComponent()
         {
+
+            textView.Size = new Size(300, 300);
+            textView.Location = new Point(0,0);
+            textView.Multiline = true;
+            textView.WordWrap = true;
+            textView.Enabled = false;
+            
             Random r = new Random();
             
             int[] nums = new int[10000];
@@ -35,23 +46,23 @@ namespace WinForms
             
             int duplicates = 0;
             foreach (var i in nums)
-            {
-                try
-                {
-                    dictionary.Add(i, i);
-                }
-                catch (ArgumentException e)
+            {                
+                if (dictionary.ContainsKey(i))
                 {
                     duplicates++;
+                }
+                else
+                {
+                    dictionary.Add(i,i);
                 }
             }
 
             DateTime endTime = DateTime.UtcNow;
 
-            String dictionaryResult = "There are " + duplicates + " duplicates, it took " +
-                                      (endTime - startTime) + " for dictionary to finish";
+            String dictionaryResult = "Dictionary:" + System.Environment.NewLine + "Duplicates: " + duplicates + " | Time: " + (endTime - startTime);
             
             Console.WriteLine(dictionaryResult);
+            Console.WriteLine(endTime - startTime);
 
             startTime = DateTime.UtcNow;
 
@@ -67,8 +78,7 @@ namespace WinForms
 
             endTime = DateTime.UtcNow;
 
-            String oNResult = "There are " + duplicates + " duplicates, it took " + (endTime - startTime) +
-                              " for O(1) space complexity to finish";
+            String oNResult = "O(1) space complexity:" + System.Environment.NewLine + "Duplicates: " + duplicates + " | Time: " + (endTime - startTime);
             
             Console.WriteLine(oNResult);
 
@@ -92,18 +102,20 @@ namespace WinForms
 
             endTime = DateTime.UtcNow;
 
-            String sortedResult = "There are " + duplicates + " duplicates, it took " + (endTime - startTime) +
-                                  " for sorted array";
+            String sortedResult = "Sorted Array:" + System.Environment.NewLine +
+                                  "Duplicates: " + duplicates + " | Time: " + (endTime - startTime);
             
             Console.WriteLine(sortedResult);
 
 
-            Form1 form = new Form1();
+            addText(dictionaryResult);
+            addText(oNResult);
+            addText(sortedResult);
 
-
-            form.addText(sortedResult);
-            form.addText(oNResult);
-            form.addText(sortedResult);
+            textView.Text = text;
+            Console.WriteLine(text);
+            
+            Controls.Add(textView);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -113,14 +125,7 @@ namespace WinForms
 
         public void addText(String text)
         {
-            TextBox textView = new TextBox();
-            
-            textView.Text = text;
-            textView.Location = new Point(20, textsCount * 60);
-            textView.Size = new Size(500, 60);
-            text.Insert(textsCount, text);
-            textsCount++;
-            this.Controls.Add(textView);
+            this.text += text + System.Environment.NewLine + System.Environment.NewLine;
         }
     }
 }

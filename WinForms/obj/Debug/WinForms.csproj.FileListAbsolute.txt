@@ -3,3 +3,8 @@ C:\Users\WHOmagoo\RiderProjects\cs321-hmcgough\cs321-hmcgough\WinForms\bin\Debug
 C:\Users\WHOmagoo\RiderProjects\cs321-hmcgough\cs321-hmcgough\WinForms\obj\Debug\WinForms.csprojResolveAssemblyReference.cache
 C:\Users\WHOmagoo\RiderProjects\cs321-hmcgough\cs321-hmcgough\WinForms\obj\Debug\WinForms.exe
 C:\Users\WHOmagoo\RiderProjects\cs321-hmcgough\cs321-hmcgough\WinForms\obj\Debug\WinForms.pdb
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\WinForms\bin\Debug\WinForms.exe
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\WinForms\bin\Debug\WinForms.pdb
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\WinForms\obj\Debug\WinForms.csprojResolveAssemblyReference.cache
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\WinForms\obj\Debug\WinForms.exe
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\WinForms\obj\Debug\WinForms.pdb
