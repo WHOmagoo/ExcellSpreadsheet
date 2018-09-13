@@ -14,18 +14,5 @@ namespace WinForms
             Application.Run(new Form1());
 
         }
-
-        public static bool listContains(int[] list, int startingIndex, int number)
-        {
-            for (int i = startingIndex; i < list.Length; i++)
-            {
-                if (list[i] == number)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
     }
 }

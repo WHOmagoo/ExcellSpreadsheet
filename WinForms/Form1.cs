@@ -1,93 +1,110 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Reflection;
+using System.Diagnostics;
 using System.Windows.Forms;
-using System.Xml;
 
 namespace WinForms
 {
     public partial class Form1 : Form
     {
-        
-        private ArrayList texts = new ArrayList();
-        private int textsCount = 0;
         private TextBox textView = new TextBox();
         private string text = "";
         
         public Form1()
         {
+            Text = "Hugh McGough - 11479833";
+            
             InitializeComponent();
         }
 
-        private void InitializeComponent()
+        private void InitializeTextBox()
         {
-
-            textView.Size = new Size(300, 300);
-            textView.Location = new Point(0,0);
             textView.Multiline = true;
             textView.WordWrap = true;
-            textView.Enabled = false;
+            textView.Dock = DockStyle.Fill;
+            textView.ReadOnly = true; 
+            textView.Text = text;
+            textView.SelectionStart = 0;
             
+            Controls.Add(textView);
+        }
+        
+        private void InitializeComponent()
+        {
+            //Randomize strings
             Random r = new Random();
-            
             int[] nums = new int[10000];
-            
+
             for (int i = 0; i < nums.Length; i++)
             {
                 nums[i] = r.Next(0,20000);
             }
-            
-            Dictionary<int, int> dictionary = new Dictionary<int, int>(20000);
-            
 
-            DateTime startTime = DateTime.UtcNow;
+
+            //Temp variable initializer
+
+            Stopwatch sw = new Stopwatch();
+            TimeSpan timeTaken;
+            
+            //Start counting duplicates by using a dictionary
+
+            Dictionary<int, int> dictionary = new Dictionary<int, int>();
+
+            sw.Start();
             
             int duplicates = 0;
             foreach (var i in nums)
-            {                
+            {
                 if (dictionary.ContainsKey(i))
                 {
                     duplicates++;
                 }
                 else
                 {
-                    dictionary.Add(i,i);
+                    dictionary.Add(i, i);
                 }
             }
 
-            DateTime endTime = DateTime.UtcNow;
+            sw.Stop();
+            timeTaken = sw.Elapsed; sw.Reset();
 
-            String dictionaryResult = "Dictionary:" + System.Environment.NewLine + "Duplicates: " + duplicates + " | Time: " + (endTime - startTime);
+            String dictionaryResult = "Dictionary:" + System.Environment.NewLine + "Duplicates: " + duplicates + " | Time: " + timeTaken + System.Environment.NewLine +
+                                      "This is O(n) because we only go through the list once and the time taken to look up if a dictionary contains a key is O(1)";
             
-            Console.WriteLine(dictionaryResult);
-            Console.WriteLine(endTime - startTime);
+            //End duplicate counting with dictionary
+           
+            
+            //Start counting duplicates by using an O(1) space efficiency algorithm
 
-            startTime = DateTime.UtcNow;
+            sw.Start();
 
             duplicates = 0;
 
             for (int i = 0; i < nums.Length;i++)
             {
-                if (Program.listContains(nums, i + 1, nums[i]))
+                if (listContains(nums, i + 1, nums[i]))
                 {
                     duplicates++;
                 }
             }
 
-            endTime = DateTime.UtcNow;
+            sw.Stop();
+            timeTaken = sw.Elapsed; sw.Reset();
 
-            String oNResult = "O(1) space complexity:" + System.Environment.NewLine + "Duplicates: " + duplicates + " | Time: " + (endTime - startTime);
+            String oNResult = "O(1) space complexity:" + System.Environment.NewLine + "Duplicates: " + duplicates + " | Time: " + timeTaken;
             
-            Console.WriteLine(oNResult);
+            
+            //End counting duplicates by using an O(1) space efficiency algorithm
 
 
-            startTime = DateTime.UtcNow;
+            
+            //Begin counting duplicates by sorting and counting
 
             duplicates = 0;
-
+            
             Array.Sort(nums);
+            
+            sw.Start();
 
             int prevNum = nums[0];
             for (int i = 1; i < nums.Length; i++)
@@ -100,32 +117,34 @@ namespace WinForms
                 prevNum = nums[i];
             }
 
-            endTime = DateTime.UtcNow;
+            sw.Stop();
+            timeTaken = sw.Elapsed; sw.Reset();
 
-            String sortedResult = "Sorted Array:" + System.Environment.NewLine +
-                                  "Duplicates: " + duplicates + " | Time: " + (endTime - startTime);
+            String sortedResult = "Sorted Array:" + System.Environment.NewLine + "Duplicates: " + duplicates + " | Time: " + timeTaken;
+
+
+
+            text = dictionaryResult + System.Environment.NewLine + System.Environment.NewLine + oNResult + System.Environment.NewLine + System.Environment.NewLine + sortedResult;
             
-            Console.WriteLine(sortedResult);
-
-
-            addText(dictionaryResult);
-            addText(oNResult);
-            addText(sortedResult);
-
-            textView.Text = text;
-            Console.WriteLine(text);
-            
-            Controls.Add(textView);
+            InitializeTextBox();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             Console.WriteLine("Form1_Load");
         }
-
-        public void addText(String text)
+        
+        private bool listContains(int[] list, int startingIndex, int number)
         {
-            this.text += text + System.Environment.NewLine + System.Environment.NewLine;
+            for (int i = startingIndex; i < list.Length; i++)
+            {
+                if (list[i] == number)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
