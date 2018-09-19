@@ -3,3 +3,4 @@ obj
 .idea
 .git
 workspace.xml
+*.xml
