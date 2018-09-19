@@ -45,7 +45,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextForm.cs" />
-    <Compile Include="TextLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
