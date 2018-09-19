@@ -10,7 +10,7 @@ namespace NotepadApp
     {
 
         private TextBox textView = new TextBox();
-        private Stream stream = null;
+        private String filePath;
         
         public TextForm()
         {
@@ -27,9 +27,11 @@ namespace NotepadApp
 
             Menu = new MainMenu();
             MenuItem file = new MenuItem("File");
-            file.MenuItems.Add("Open", OpenClickEvent);
-            file.MenuItems.Add("Save", SaveClickEvent);
-            file.MenuItems.Add("Save as", SaveAsClickEvent);
+            file.MenuItems.Add("Open", OpenClickEventHandler);
+            file.MenuItems.Add("Save", SaveClickEventHandler);
+            file.MenuItems.Add("Save as", SaveAsClickEventHandler);
+            file.MenuItems.Add("Load 50 Fibonacci", FiftyFibonacciClickEventHandler);
+            file.MenuItems.Add("Load 100 Fibonacci", OneHundredFibonacciClickEventHandler);
 
             Menu.MenuItems.Add(file);
             
@@ -53,7 +55,19 @@ namespace NotepadApp
             Controls.Add(textView);
         }
 
-        private void SaveAsClickEvent(object sender, EventArgs e)
+        private void OneHundredFibonacciClickEventHandler(object sender, EventArgs e)
+        {
+            FibonacciTextReader ftr = new FibonacciTextReader(100);
+            LoadText(ftr);
+        }
+
+        private void FiftyFibonacciClickEventHandler(object sender, EventArgs e)
+        {
+            FibonacciTextReader ftr = new FibonacciTextReader(50);
+            LoadText(ftr);
+        }
+
+        private void SaveAsClickEventHandler(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Title = "Select a location to save the file";
@@ -63,25 +77,36 @@ namespace NotepadApp
             switch (result)
             {
                     case DialogResult.OK:
-                        stream = saveFileDialog.OpenFile();
-                        SaveClickEvent(sender, e);
+                        saveFileDialog.OpenFile().Close();
+                        
+                        filePath = saveFileDialog.FileName;
+                        SaveClickEventHandler(sender, e);
                         break;
             }
             
         }
 
-        private void SaveClickEvent(object sender, EventArgs e)
+        private void SaveClickEventHandler(object sender, EventArgs e)
         {
-            if (stream == null)
+            if (filePath == null)
             {
-                SaveAsClickEvent(sender, e);
+                SaveAsClickEventHandler(sender, e);
             }
             else
             {
-                StreamWriter sw = new StreamWriter(stream);
-                sw.Write(textView.Text);
-                sw.Close();
-                
+                try
+                {
+                    StreamWriter sw = new StreamWriter(new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Write));
+
+                    sw.Write(textView.Text);
+                    sw.Close();
+                }
+                catch (Exception err)
+                {
+                    Console.WriteLine(filePath);
+                    Console.WriteLine(err.Message);
+                }
+
             }
         }
 
@@ -90,7 +115,7 @@ namespace NotepadApp
             textView.WordWrap = !textView.WordWrap;
         }
 
-        private void OpenClickEvent(object sender, EventArgs e)
+        private void OpenClickEventHandler(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = "Select a file to open";
@@ -101,16 +126,19 @@ namespace NotepadApp
             switch (result)
             {
                 case DialogResult.OK:
-                    stream = openFileDialog.OpenFile();
+
+
+                    filePath = openFileDialog.FileName;
+                    Stream stream = openFileDialog.OpenFile();
                     
                     LoadText(new StreamReader(stream));
                     
+                    stream.Close();
+                    
                     break;
             }
+            Console.WriteLine(filePath);
             
-            
-            
-            Console.WriteLine("Finished");
         }
 
         public void LoadText(TextReader tr)

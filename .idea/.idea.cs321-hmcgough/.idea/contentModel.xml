@@ -8,6 +8,10 @@
       <e p="NotepadApp" t="IncludeRecursive">
         <e p=".gitignore" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
+        <e p="FibonacciTextReader.cs" t="Include" />
+        <e p="Files" t="Include">
+          <e p="src.txt" t="Include" />
+        </e>
         <e p="NotepadApp.csproj" t="IncludeRecursive" />
         <e p="obj" t="ExcludeRecursive" />
         <e p="Program.cs" t="Include" />
@@ -17,6 +21,8 @@
         <e p="starter" t="Include">
           <e p="WinForms Notepad Application and Fibonacci BigInt Text Reader.pdf" t="Include" />
         </e>
+        <e p="TextForm.cs" t="Include" />
+        <e p="TextLoader.cs" t="Include" />
       </e>
       <e p="packages" t="ExcludeRecursive" />
       <e p="WinForms" t="IncludeRecursive">
