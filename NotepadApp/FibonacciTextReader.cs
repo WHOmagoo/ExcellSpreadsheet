@@ -33,10 +33,7 @@ namespace NotepadApp
                             break;
                         case 1 :
                             result = 1;
-                            break;
-                        case 2 :
-                            result = 1;
-                            prevPrevNum = 1;
+                            prevPrevNum = 0;
                             prevNum = 1;
                             break;
                         default:
@@ -48,7 +45,7 @@ namespace NotepadApp
                 
                 curLineNumber++;
 
-                return (curLineNumber) + ": " + result + Environment.NewLine;
+                return curLineNumber + ": " + result + Environment.NewLine;
             }
             else
             {
