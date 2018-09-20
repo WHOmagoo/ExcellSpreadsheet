@@ -1,3 +1,5 @@
+//Hugh McGough - 114798333
+
 using System;
 using System.IO;
 using System.Net;

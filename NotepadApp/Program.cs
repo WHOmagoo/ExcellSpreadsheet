@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Hugh McGough - 114798333
+
+using System;
 using System.Windows.Forms;
 
 namespace NotepadApp
