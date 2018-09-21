@@ -1,6 +1,6 @@
 namespace BSTtree
 {
-    public class BinTree<T>
+    public abstract class BinTree<T>
     {
         public abstract void Insert<T>(T val);
 

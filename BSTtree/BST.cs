@@ -2,7 +2,7 @@ using System;
 
 namespace BSTtree
 {
-    public class BST
+    public class BST : BinTree<T>
     {
         private BST left;
         private BST right;
