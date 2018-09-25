@@ -15,11 +15,6 @@ namespace BSTtree
             this.value = value;
         }
 
-        public void add(BST<T> newBST)
-        {
-            
-        }
-
         public int Count()
         {
             int count = 1;
@@ -60,18 +55,18 @@ namespace BSTtree
             return value;
         }
 
-        public void printSorted()
+        public override void InOrder()
         {
             if (left != null)
             {
-                left.printSorted();
+                left.InOrder();
             }
 
             Console.Write(value + ", ");
 
             if (right != null)
             {
-                right.printSorted();
+                right.InOrder();
             }
         }
 
@@ -97,7 +92,7 @@ namespace BSTtree
                 }
                 else
                 {
-                    left.add(newBST);
+                    left.Insert(newBST);
                 }
             }
             else if(newBST > this)
@@ -108,7 +103,7 @@ namespace BSTtree
                 }
                 else
                 {
-                    right.add(newBST);
+                    right.Insert(newBST);
                 }
             }
             else
@@ -122,73 +117,125 @@ namespace BSTtree
         {
             BST<T> newBST = new BST<T>((T) value);
             
-            if (newBST < this)
-            {
-                if (left == null)
-                {
-                    left = newBST;
-                }
-                else
-                {
-                    left.add(newBST);
-                }
-            }
-            else if(newBST > this)
-            {
-                if (right == null)
-                {
-                    right = newBST;
-                }
-                else
-                {
-                    right.add(newBST);
-                }
-            }
-            else
-            {
-                return;
-            }
+            Insert(newBST);
+            
+//            if (newBST < this)
+//            {
+//                if (left == null)
+//                {
+//                    left = newBST;
+//                }
+//                else
+//                {
+//                    left.add(newBST);
+//                }
+//            }
+//            else if(newBST > this)
+//            {
+//                if (right == null)
+//                {
+//                    right = newBST;
+//                }
+//                else
+//                {
+//                    right.add(newBST);
+//                }
+//            }
+//            else
+//            {
+//                return;
+//            }
             
         }
 
         public override bool Contains(T val)
         {
-            
-            throw new NotImplementedException();
-        }
 
-        public override void InOrder()
-        {
-            throw new NotImplementedException();
+            if (value.CompareTo(val) == 0)
+            {
+                return true;
+            }
+
+            if (value.CompareTo(val) < 0)
+            {
+                if (left != null)
+                {
+                    return left.Contains(val);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (right != null)
+                {
+                    return right.Contains(val);
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
 
         public override void PreOrder()
         {
-            throw new NotImplementedException();
+            Console.Write(value + ", ");
+            if (left != null)
+            {
+                left.PreOrder();
+            }
+
+            if (right != null)
+            {
+                right.PreOrder();
+            }
         }
 
         public override void PostOrder()
         {
-            throw new NotImplementedException();
+            if (left != null)
+            {
+                left.PostOrder();
+            }
+
+            if (right != null)
+            {
+                right.PostOrder();
+            }
+
+            Console.Write(value + ", ");
         }
 
         public static bool operator==(BST<T> a, BST<T> b)
         {
+            if (ReferenceEquals(a, b)) return true;
+            if (ReferenceEquals(a, null)) return false;
+            if (ReferenceEquals(b, null)) return false;
+            
             return a.value.CompareTo(b) == 0;
         }
 
         public static bool operator !=(BST<T> a, BST<T> b)
         {
-            return a.value.CompareTo(b.value) != 0;
+            return !(a == b);
         }
 
         public static bool operator <(BST<T> a, BST<T> b)
         {
+            if (ReferenceEquals(a, b)) return false;
+            if (ReferenceEquals(a, null)) return true;
+            if (ReferenceEquals(b, null)) return false;
             return a.value.CompareTo(b.value) < 0;
         }
 
         public static bool operator >(BST<T> a, BST<T> b)
         {
+            if (ReferenceEquals(a, b)) return false;
+            if (ReferenceEquals(a, null)) return false;
+            if (ReferenceEquals(b, null)) return true;
             return a.value.CompareTo(b.value) > 0;
         }
 

@@ -13,11 +13,11 @@ namespace BSTtree
 
             int[] nums = parseInput(response);
             
-            BST root = new BST(nums[0]);
+            BST<int> root = new BST<int>(nums[0]);
             
             for (int i = 1; i < nums.Length; i++)
             {
-                root.add(new BST(nums[i]));
+                root.Insert(nums[i]);
             }
 
             Console.WriteLine("The numbers are: ");
@@ -29,8 +29,17 @@ namespace BSTtree
 
             Console.Write("\n\nHere are the numbers in sorted order: ");
             
-            root.printSorted();
+            root.InOrder();
 
+            Console.WriteLine();
+            
+            Console.Write("\n\nHere are the numbers in preOrder: ");
+            
+            root.PreOrder();
+            Console.WriteLine();
+            
+            Console.Write("\n\nHere are the numbers in postOrder: ");
+            root.PostOrder();
             Console.WriteLine();
             
             root.printStats();

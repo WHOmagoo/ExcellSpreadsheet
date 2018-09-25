@@ -2,11 +2,10 @@ using System;
 
 namespace BSTtree
 {
-    public abstract class BinTree<T>
-
+    public abstract class BinTree<T> where T : IComparable
     {
-        
-    public abstract void Insert<T>(T val);
+
+    public abstract void Insert(T val);
 
     public abstract bool Contains(T val);
 
