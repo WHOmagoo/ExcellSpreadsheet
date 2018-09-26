@@ -82,7 +82,9 @@ namespace BSTtree
             System.Console.WriteLine("Optimal Depth possible for " + Count() + " items: " + getOptimalDepth());
         }
 
-        public void Insert(BST<T> newBST)
+        //We don't want to allow inserting BST tress to our bst tree to avoid accidentally getting loops in our tree
+        //by adding a node to itself.
+        private void Insert(BST<T> newBST)
         {
             if (newBST < this)
             {
