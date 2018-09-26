@@ -114,38 +114,8 @@ namespace BSTtree
 
         
         public override void Insert(T value)
-        {
-            BST<T> newBST = new BST<T>((T) value);
-            
-            Insert(newBST);
-            
-//            if (newBST < this)
-//            {
-//                if (left == null)
-//                {
-//                    left = newBST;
-//                }
-//                else
-//                {
-//                    left.add(newBST);
-//                }
-//            }
-//            else if(newBST > this)
-//            {
-//                if (right == null)
-//                {
-//                    right = newBST;
-//                }
-//                else
-//                {
-//                    right.add(newBST);
-//                }
-//            }
-//            else
-//            {
-//                return;
-//            }
-            
+        {            
+            Insert(new BST<T>(value));
         }
 
         public override bool Contains(T val)
@@ -158,25 +128,13 @@ namespace BSTtree
 
             if (value.CompareTo(val) < 0)
             {
-                if (left != null)
-                {
-                    return left.Contains(val);
-                }
-                else
-                {
-                    return false;
-                }
+                if (left != null) return left.Contains(val);
+                else return false;
             }
             else
             {
-                if (right != null)
-                {
-                    return right.Contains(val);
-                }
-                else
-                {
-                    return false;
-                }
+                if (right != null) return right.Contains(val);
+                else return false;
             }
         }
 
@@ -256,6 +214,7 @@ namespace BSTtree
             return value.CompareTo(other.value);
         }
 
+        //We don't know how to compare to objects that aren't BST's so we throw an error
         public int CompareTo(object obj)
         {
             throw new NotImplementedException();
