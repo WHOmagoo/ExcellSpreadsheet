@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinForms", "WinForms\WinForms.csproj", "{1C2DC329-F5A0-4AC4-97B0-3B9CFF9C7573}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetEngine", "SpreadsheetEngine\SpreadsheetEngine.csproj", "{9C4E95A5-22AE-46A7-AA9D-1A5607426394}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spreadsheet", "Spreadsheet\Spreadsheet.csproj", "{4A0BB868-2C88-479D-B779-64B1E5AAE0A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{1C2DC329-F5A0-4AC4-97B0-3B9CFF9C7573}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C2DC329-F5A0-4AC4-97B0-3B9CFF9C7573}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C2DC329-F5A0-4AC4-97B0-3B9CFF9C7573}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C4E95A5-22AE-46A7-AA9D-1A5607426394}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C4E95A5-22AE-46A7-AA9D-1A5607426394}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C4E95A5-22AE-46A7-AA9D-1A5607426394}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C4E95A5-22AE-46A7-AA9D-1A5607426394}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A0BB868-2C88-479D-B779-64B1E5AAE0A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A0BB868-2C88-479D-B779-64B1E5AAE0A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A0BB868-2C88-479D-B779-64B1E5AAE0A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A0BB868-2C88-479D-B779-64B1E5AAE0A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
