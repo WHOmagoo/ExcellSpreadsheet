@@ -1,0 +1,9 @@
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\BSTTest\bin\Debug\BSTTest.dll
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\BSTTest\bin\Debug\BSTTest.pdb
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\BSTTest\bin\Debug\BSTtree.exe
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\BSTTest\bin\Debug\nunit.framework.dll
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\BSTTest\bin\Debug\BSTtree.pdb
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\BSTTest\bin\Debug\nunit.framework.xml
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\BSTTest\obj\Debug\BSTTest.csprojResolveAssemblyReference.cache
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\BSTTest\obj\Debug\BSTTest.dll
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\BSTTest\obj\Debug\BSTTest.pdb

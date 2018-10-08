@@ -1,0 +1,5 @@
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\BSTtree\bin\Debug\BSTtree.exe
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\BSTtree\bin\Debug\BSTtree.pdb
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\BSTtree\obj\Debug\BSTtree.csprojResolveAssemblyReference.cache
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\BSTtree\obj\Debug\BSTtree.exe
+C:\Users\Hugh\RiderProjects\cs321-hmcgough\BSTtree\obj\Debug\BSTtree.pdb
