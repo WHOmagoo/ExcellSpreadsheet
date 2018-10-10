@@ -1,7 +1,4 @@
 using System.ComponentModel;
-using System.IO;
-using System.Runtime.CompilerServices;
-using SpreadsheetEngine.Annotations;
 
 namespace SpreadsheetEngine
 {
@@ -12,8 +9,8 @@ namespace SpreadsheetEngine
         public readonly int ColIndex;
 
         private string Text;
+        
         public event PropertyChangedEventHandler PropertyChanged;
-
 
         public Cell(int row, int col)
         {
@@ -26,19 +23,22 @@ namespace SpreadsheetEngine
             return Text;
         }
 
-        [NotifyPropertyChangedInvocator]
         public void setText(string newText)
         {
             if (!string.Equals(newText, Text))
             {
+                Text = newText;
                 OnPropertyChanged("Text");
             }
         }
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected void OnPropertyChanged(string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }

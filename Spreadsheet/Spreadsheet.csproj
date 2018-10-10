@@ -35,11 +35,16 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Form1.cs" />
+    <Compile Include="HeaderConverter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpreadsheetView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="starter\HW5 - Spreadsheet v1.0.pdf" />

@@ -8,16 +8,17 @@ namespace SpreadsheetEngineTest
     public class Tests
     {
         [Test]
-        public void Test1()
+        public void TestSimpleCell()
         {
-            Assert.True(true);
-        }
-
-        [Test]
-        public void TestCell()
-        {
-            Cell c = new Cell(4, 9);
-            Assert.True();
+            
+            SimpleCell c = new SimpleCell(4, 9);
+            
+            Assert.True(c.RowIndex == 4);
+            Assert.True(c.ColIndex == 9);
+            Assert.True(c.works());
+            
+            
+            
         }
     }
 }

@@ -1,16 +1,27 @@
 ﻿using System;
-using SpreadsheetEngine;
+using System.Windows.Forms;
 
 namespace Spreadsheet
 {
+        
     internal class Program
     {
-        public static void Main(string[] args)
+        [STAThread]
+        public static void Main()
         {
-            Class1 test = new Class1(5);
+            Application.EnableVisualStyles();
+            Application.Run(new Form1());
 
-            Console.WriteLine(test.getVal());
-            
         }
     }
+
+        
+//        public static void Main(string[] args)
+//        {
+//            SpreadsheetEngine.Spreadsheet s = new SpreadsheetEngine.Spreadsheet();
+//
+//            Cell cell = s.getCell(5, 5);
+//            cell.setText("Bobbert mann!");
+//        }
+   
 }
