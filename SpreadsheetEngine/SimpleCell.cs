@@ -6,5 +6,10 @@ namespace SpreadsheetEngine
         {
             //calls the parent constructor
         }
+
+        public bool works()
+        {
+            return true;
+        }
     }
 }
