@@ -53,7 +53,7 @@ namespace Spreadsheet
 
             if (sv != null)
             {
-                Log.Log.getLog().logMessage("Accessing cell ({0},{1}) in SpreadsheetView", e.RowIndex, e.ColumnIndex);
+                Log.Log.getLog().logMessage("Accessing cell ({0},{1}) in SpreadsheetView from Spreadsheet", e.RowIndex, e.ColumnIndex);
                 Cell c = sv._spreadsheet.getCell(e.RowIndex, e.ColumnIndex);
                 
                 if (c != null)
@@ -77,7 +77,7 @@ namespace Spreadsheet
 
             if (cell != null)
             {
-                Log.Log.getLog().logLine("Updating a cells value in gui");
+                Log.Log.getLog().logLine("Updating {0} value in gui", cell);
                 this[cell.ColIndex, cell.RowIndex].Value = cell.getValue();
             }
             else
