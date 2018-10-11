@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using SpreadsheetEngine;
 
 namespace Spreadsheet
 {
@@ -10,7 +11,17 @@ namespace Spreadsheet
         public static void Main()
         {
             Log.Log.getLog().addOutputStream(Console.Out);
-            
+
+            for (int i = 0; i < 28 + 0 * Math.Pow(2,14); i++)
+            {
+                Console.WriteLine(i + "=" +HeaderConverter.Convert(i));
+            }
+
+            int n = 701;
+            Console.WriteLine((n / 26 / 25) % 26);
+            Console.WriteLine((n / 26) % 26);
+            Console.WriteLine(n % 26);
+
             Application.EnableVisualStyles();
             Application.Run(new Form1());
 

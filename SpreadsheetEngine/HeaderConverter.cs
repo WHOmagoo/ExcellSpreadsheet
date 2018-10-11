@@ -1,75 +1,86 @@
 using System;
+using System.CodeDom;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace SpreadsheetEngine
 {
     public class HeaderConverter
     {
-        //Not Zero based index
+        //Using Zero based index
+        //Anything less than 0 will return empty
+        //Anything larger than 2^14 - 1 will return empty
         public static string Convert(int index)
         {
-            char[] result = new Char[(int) Math.Ceiling(Math.Log(index - 1, 26))];
+            char[] result;
+            int placesCount;
 
-            Console.WriteLine("Array size for index {0} is {1}", index, result.Length);
-            while (index > 0)
+            if (index < 0 || index >= Math.Pow(2, 14))
             {
-                index--;
-                char cur = (char) ('A' + index % 26);
+                return String.Empty;
+            }
 
-                Console.WriteLine("Inserting into index {0}", (int) Math.Floor(Math.Log(index, 26)));
-                result[(int) Math.Floor(Math.Log(index, 26))] = cur;
 
+            if (index == 0)
+            {
+                return "A";
+            }
+
+
+            if (index < 26)
+            {
+                placesCount = 1;
+            } else if (index < 702)
+            {
+                placesCount = 2;
+            }
+            else
+            {
+                placesCount = 3;
+            }
+            
+            result = new Char[placesCount];
+            
+            //Console.WriteLine("Array size for index {0} is {1}", index, result.Length);
+            
+            for (int i = 0; i < placesCount; i++)
+            {
+                char cur = (char) ('A' + (index + 26 - 1) % 26);
+                int curIndex = placesCount - i - 1;
+
+                //Console.WriteLine("Inserting {0} into index {1}", cur, curIndex);
+
+                result[curIndex] = cur;
 
                 index /= 26;
+                //Console.WriteLine("New index is {0}", index);
             }
 
-            String returnResult = "";
             
-            for (int i = 0; i < result.Length; i++)
-            {
-                if (result[i] != '\0')
-                {
-                    returnResult += result[i];
-                }
-                else
-                {
-                    break;
-                }
-            }
+            result[placesCount - 1] = (char) ('A' + (result[placesCount - 1] - 'A' + 1) % 26);
+           
             
-            return returnResult;            
+            return new string(result);            
         }
 
-        public static void TestConvert()
+        public static int Convert(string s)
         {
+
+            int result = 0;
             
-            String result = Convert(1);
+            s.ToUpper();
             
-            if (!result.Equals("A"))
+            for (int i = s.Length - 1; i >= 0; i--)
             {
-                Console.WriteLine("1 != A | " + result);
+                if (s[i] < 'A' && s[i] > 'Z')
+                {
+                    //TODO throw an error here
+                    return Int32.MinValue;
+                }
+
+                result += (s[i] - 'A') * (int) Math.Pow(26, i);
             }
 
-            result = Convert(26);
-
-            if (!result.Equals("Z"))
-            {
-                Console.WriteLine("26 != Z |" + result);
-            }
-            
-            result = Convert(8);
-            
-            if (!result.Equals("H"))
-            {
-                Console.WriteLine("8 != H | " + result);
-            }
-
-            result = Convert(35);
-
-            if (!result.Equals("AI"))
-            {
-                Console.WriteLine("35 != AI " + result);
-            }
+            return result;
         }
-
     }    
 }

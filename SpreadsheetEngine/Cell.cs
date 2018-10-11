@@ -10,6 +10,7 @@ namespace SpreadsheetEngine
         public readonly int ColIndex;
 
         private string Text;
+        private string Value;
         
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -45,6 +46,20 @@ namespace SpreadsheetEngine
             {
                 Log.Log.getLog().logMessage("Handler was null in Cell");
             }
+        }
+
+        internal void setValue(string newValue)
+        {
+            if (!string.Equals(Value, newValue))
+            {
+                Value = newValue;
+                OnPropertyChanged("Value");
+            }
+        }
+
+        public string getValue()
+        {
+            return Value;
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Spreadsheet
             
             for (int i = 0; i < cols; i++)
             {
-                Columns[i].Name = HeaderConverter.Convert(i + 1);
+                Columns[i].Name = HeaderConverter.Convert(i);
             }
 
             for (int i = 0; i < rows; i++)
@@ -42,15 +42,18 @@ namespace Spreadsheet
 
             
             CellValueChanged += SpreadsheetView_CellValueChanged;
+            _spreadsheet.PropertyChanged += SpreadsheetView_SpreadsheetCellUpdated;
             
         }
 
         private void SpreadsheetView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
+            
             SpreadsheetView sv = sender as SpreadsheetView;
 
             if (sv != null)
             {
+                Log.Log.getLog().logMessage("Accessing cell ({0},{1}) in SpreadsheetView", e.RowIndex, e.ColumnIndex);
                 Cell c = sv._spreadsheet.getCell(e.RowIndex, e.ColumnIndex);
                 
                 if (c != null)
@@ -65,6 +68,21 @@ namespace Spreadsheet
             else
             {
                 Log.Log.getLog().logMessage("sv was not a spreadsheetview in SpreadsheetView");
+            }
+        }
+
+        private void SpreadsheetView_SpreadsheetCellUpdated(object sender, PropertyChangedEventArgs e)
+        {
+            Cell cell = sender as Cell;
+
+            if (cell != null)
+            {
+                Log.Log.getLog().logLine("Updating a cells value in gui");
+                this[cell.ColIndex, cell.RowIndex].Value = cell.getValue();
+            }
+            else
+            {
+                Log.Log.getLog().logLine("Trying to update a non cell item");
             }
         }
     }

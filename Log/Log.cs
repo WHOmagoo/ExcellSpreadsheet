@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Xml;
 
@@ -17,7 +18,7 @@ namespace Log
         
         private Log()
         {
-            
+             outputStreams = new List<TextWriter>();
         }
 
         public static void enableLog()
@@ -41,7 +42,7 @@ namespace Log
             {
                 foreach (var writer in outputStreams)
                 {
-                    writer.Write(message, args);
+                    writer.Write(message + Environment.NewLine, args);
                 }
             }
         }
