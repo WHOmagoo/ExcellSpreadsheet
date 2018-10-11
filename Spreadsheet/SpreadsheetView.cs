@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using Log;
 using System.Windows.Forms;
 using SpreadsheetEngine;
 
@@ -25,11 +26,10 @@ namespace Spreadsheet
 
             Dock = DockStyle.Fill;
 
+            RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
 
             DoubleBuffered = true;
-
-
-            CellValueChanged += SpreadsheetView_CellValueChanged;
+            
             for (int i = 0; i < cols; i++)
             {
                 Columns[i].Name = HeaderConverter.Convert(i + 1);
@@ -39,6 +39,10 @@ namespace Spreadsheet
             {
                 Rows[i].HeaderCell.Value = (i + 1).ToString();
             }
+
+            
+            CellValueChanged += SpreadsheetView_CellValueChanged;
+            
         }
 
         private void SpreadsheetView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -55,12 +59,12 @@ namespace Spreadsheet
                 }
                 else
                 {
-                    Console.WriteLine("Trying to access invalid cell " + e.RowIndex + ", " + e.ColumnIndex);
+                    Log.Log.getLog().logMessage("Trying to access invalid cell ({0},{1}) ", e.RowIndex, e.ColumnIndex);
                 }
             }
             else
             {
-                Console.WriteLine("sv was not a spreadsheetview");
+                Log.Log.getLog().logMessage("sv was not a spreadsheetview in SpreadsheetView");
             }
         }
     }

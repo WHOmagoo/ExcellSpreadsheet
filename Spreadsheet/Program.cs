@@ -9,6 +9,8 @@ namespace Spreadsheet
         [STAThread]
         public static void Main()
         {
+            Log.Log.getLog().addOutputStream(Console.Out);
+            
             Application.EnableVisualStyles();
             Application.Run(new Form1());
 

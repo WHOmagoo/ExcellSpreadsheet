@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 
 namespace SpreadsheetEngine
@@ -37,7 +38,12 @@ namespace SpreadsheetEngine
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null)
             {
+                Log.Log.getLog().logMessage("Cell property changed. We changed {0}", propertyName);
                 handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+            else
+            {
+                Log.Log.getLog().logMessage("Handler was null in Cell");
             }
         }
     }

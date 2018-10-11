@@ -1,22 +1,23 @@
 using System;
-using System.Linq;
-using System.Text;
-using System.Xml.XPath;
 
-namespace Spreadsheet
+namespace SpreadsheetEngine
 {
     public class HeaderConverter
     {
         //Not Zero based index
         public static string Convert(int index)
         {
-            char[] result = new Char[index / 26 + 1];
+            char[] result = new Char[(int) Math.Ceiling(Math.Log(index - 1, 26))];
+
+            Console.WriteLine("Array size for index {0} is {1}", index, result.Length);
             while (index > 0)
             {
                 index--;
                 char cur = (char) ('A' + index % 26);
 
-                result[index / 26] = cur;
+                Console.WriteLine("Inserting into index {0}", (int) Math.Floor(Math.Log(index, 26)));
+                result[(int) Math.Floor(Math.Log(index, 26))] = cur;
+
 
                 index /= 26;
             }

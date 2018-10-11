@@ -64,18 +64,20 @@ namespace SpreadsheetEngine
         public void cellPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
 
+            
+            
             Cell cell = sender as Cell;
             
-            Console.WriteLine("Property changed " + e.PropertyName + ".");
+            Log.Log.getLog().logMessage("Property changed {0}.", e.PropertyName);
 
             if (cell != null && e.PropertyName == "Text")
             {
                 //TODO check if the new text is an equation or not and update the value of the cell accordingly
-                Console.WriteLine("(" + cell.ColIndex + "," + cell.RowIndex + ") = " + cell.getText());
+                Log.Log.getLog().logMessage("({0},{1}) Text = {2}", cell.ColIndex, cell.RowIndex, cell.getText());
             }
             else
             {
-                Console.WriteLine("Unknown type changed");
+                Log.Log.getLog().logMessage("Unknown type changed");
             }
         }
     }
