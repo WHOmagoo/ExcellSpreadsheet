@@ -39,7 +39,7 @@ namespace SpreadsheetEngine
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null)
             {
-                Log.Log.getLog().logMessage("Cell property changed. We changed {0}", propertyName);
+                Log.Log.getLog().logMessage("{0} property changed. We changed {1}", this, propertyName);
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
             else
@@ -60,6 +60,11 @@ namespace SpreadsheetEngine
         public string getValue()
         {
             return Value;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("({0},{1})", RowIndex, ColIndex);
         }
     }
 }
