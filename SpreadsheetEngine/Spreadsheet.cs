@@ -13,7 +13,8 @@ namespace SpreadsheetEngine
         private int rowCount;
         private int colCount;
         
-        private List<List<Cell>> cells;
+        private Dictionary<Tuple<int, int>, Cell> cells;
+        private Dictionary<Cell, List<Cell>> valueLinks;
         
         public event PropertyChangedEventHandler PropertyChanged;
         
@@ -22,24 +23,22 @@ namespace SpreadsheetEngine
             this.rowCount = rowCount;
             this.colCount = colCount;
 
-            cells = new List<List<Cell>>(rowCount);
+            cells = new Dictionary<Tuple<int, int>, Cell>();
             
-            while (0 <= --rowCount)
+            valueLinks = new Dictionary<Cell, List<Cell>>();
+            
+            for (int row = 0; row < rowCount; row++)
             {
-
-                int col = colCount;
-                List<Cell> currentCols = new List<Cell>(colCount);
-                
-                while (0 <= --col)
+                for(int col = 0; col < colCount; col++)
                 {
-                    Cell cell = new SimpleCell(rowCount, col);
+                    Cell cell = new SimpleCell(row, col);
 
                     cell.PropertyChanged += cellPropertyChanged;
-                    
-                    currentCols.Add(cell);    
+                        
+                    cells.Add(new Tuple<int, int>(row, col), cell);
+
                 }
-                
-                cells.Add(currentCols);
+
             }
         }
 
@@ -55,11 +54,16 @@ namespace SpreadsheetEngine
 
         public Cell getCell(int row, int col)
         {
-            if (cells.Count > row && cells[row].Count > col && row >= 0 && col >= 0)
+            Tuple<int, int> key = new Tuple<int, int>(row, col);
+            if (cells.ContainsKey(key))
             {
-                return cells[row][col];
+                
+                 Cell cell = cells[key];
+                Log.Log.getLog().logLine("Sending {0} from input ({1},{2}).", cell, row, col);
+                return cell;
             }
 
+            Log.Log.getLog().logLine("Failed to get cell ({0},{1})", row, col);
             return null;
         }
 
@@ -72,40 +76,70 @@ namespace SpreadsheetEngine
             
             Log.Log.getLog().logMessage("Property changed {0}.", e.PropertyName);
 
-            if (cell != null && e.PropertyName == "Text")
-            {   
-                if (cell.getText().StartsWith("="))
+            if (cell != null)
+            {
+                switch (e.PropertyName)
                 {
+                    case "Text":
+                        if (cell.getText().StartsWith("="))
+                        {
 
-                    Console.WriteLine("Setting value for equation");
-                    //TODO create a class that can evaluate values for equations
-                    string cellContents = cell.getText();
+                            Console.WriteLine("Setting value for equation");
+                            //TODO refactor this to a class that can evaluate values for equations
+                            string cellContents = cell.getText();
 
-                    string[] parts = cellContents.Split(',');
+                            string[] parts = cellContents.Split(',');
 
-                    try
-                    {
-                        int rowNum = Int32.Parse(parts[0].Substring(1));
-                        int colNum = HeaderConverter.Convert(parts[1]);
+                            try
+                            {
+                                int rowNum = Int32.Parse(parts[0].Substring(1));
+                                int colNum = HeaderConverter.Convert(parts[1]);
 
-                        Cell copyValue = getCell(rowNum - 1, colNum);
-                        cell.setValue(copyValue.getValue());
-                    }
-                    catch (Exception error)
-                    {
-                        cell.setValue("ERROR");   
-                    }
+                                Cell copyValue = getCell(rowNum - 1, colNum);
+                                cell.setValue(copyValue.getValue());
 
+                                if (!valueLinks.ContainsKey(copyValue))
+                                {
+                                    valueLinks.Add(copyValue, new List<Cell>());
+                                }
+
+                                valueLinks[copyValue].Add(cell);
+                                Log.Log.getLog().logLine("{0} subscribing to {1}", cell, copyValue);
+                            }
+                            catch (Exception error)
+                            {
+                                cell.setValue("ERROR");
+                            }
+
+                        }
+                        else
+                        {
+                            cell.setValue(cell.getText());
+                        }
+
+                        //TODO check if the new text is an equation or not and update the value of the cell accordingly
+                        Log.Log.getLog().logMessage("({0},{1}) Text = {2}", cell.ColIndex, cell.RowIndex,
+                            cell.getText());
+
+                        OnPropertyChanged(cell, "Value");
+                        break;
+                    case "Value":
+                        Log.Log.getLog().logLine("{0}'s value was changed to {1}", cell, cell.getValue());
+                        if (valueLinks.ContainsKey(cell))
+                        {
+                            foreach (var cellLinked in valueLinks[cell])
+                            {
+                                Log.Log.getLog().logLine("Updating {0}'s value from {1}", cellLinked, cell);
+                                cellLinked.setValue(cell.getValue());
+                                OnPropertyChanged(cellLinked, "Value");
+                            }
+                        }
+
+                        break;
+                    default : Log.Log.getLog().logLine("Unknown property changed for {0},{1}", cell.RowIndex, cell.ColIndex);
+                        break;
                 }
-                else
-                {
-                    cell.setValue(cell.getText());
-                }
-                //TODO check if the new text is an equation or not and update the value of the cell accordingly
-                Log.Log.getLog().logMessage("({0},{1}) Text = {2}", cell.ColIndex, cell.RowIndex, cell.getText());
-                
-                OnPropertyChanged(cell, "Value");
-                
+
             }
             else
             {
