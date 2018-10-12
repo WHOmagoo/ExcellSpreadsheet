@@ -104,6 +104,7 @@ namespace SpreadsheetEngine
 
                                 valueLinks[copyValue].Add(cell);
                                 Log.Log.getLog().logLine("{0} subscribing to {1}", cell, copyValue);
+                                cell.setValue(copyValue.getValue());
                             }
                             catch (Exception error)
                             {
@@ -120,7 +121,7 @@ namespace SpreadsheetEngine
                         Log.Log.getLog().logMessage("({0},{1}) Text = {2}", cell.ColIndex, cell.RowIndex,
                             cell.getText());
 
-                        OnPropertyChanged(cell, "Value");
+                        OnPropertyChanged(cell, "Text");
                         break;
                     case "Value":
                         Log.Log.getLog().logLine("{0}'s value was changed to {1}", cell, cell.getValue());
@@ -130,10 +131,10 @@ namespace SpreadsheetEngine
                             {
                                 Log.Log.getLog().logLine("Updating {0}'s value from {1}", cellLinked, cell);
                                 cellLinked.setValue(cell.getValue());
-                                OnPropertyChanged(cellLinked, "Value");
                             }
                         }
-
+                        
+                        OnPropertyChanged(cell, "Value");
                         break;
                     default : Log.Log.getLog().logLine("Unknown property changed for {0},{1}", cell.RowIndex, cell.ColIndex);
                         break;
@@ -143,6 +144,7 @@ namespace SpreadsheetEngine
             else
             {
                 Log.Log.getLog().logMessage("Unknown type changed");
+                OnPropertyChanged(sender, e.PropertyName);
             }
         }
         
