@@ -74,6 +74,8 @@ namespace Spreadsheet
         private void SpreadsheetView_SpreadsheetCellUpdated(object sender, PropertyChangedEventArgs e)
         {
             Cell cell = sender as Cell;
+            
+            Log.Log.getLog().logLine("GUI received property changed event {0}", e.PropertyName);
 
             if (cell != null)
             {
