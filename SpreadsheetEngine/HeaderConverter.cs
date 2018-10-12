@@ -69,16 +69,26 @@ namespace SpreadsheetEngine
             
             s.ToUpper();
             
-            for (int i = s.Length - 1; i >= 0; i--)
+            for (int i = 0; i < s.Length - 1; i++)
             {
                 if (s[i] < 'A' && s[i] > 'Z')
                 {
-                    //TODO throw an error here
-                    return Int32.MinValue;
+                    throw new ArgumentException(String.Format("Error with index {0}", i));
                 }
-
-                result += (s[i] - 'A') * (int) Math.Pow(26, i);
+                
+                result += (s[i] - 'A' + 1) * (int) Math.Pow(26, s.Length - i - 1);
             }
+
+            char last = s[s.Length - 1];
+
+            if (last < 'A' && last > 'Z')
+            {
+                //TODO throw an error here
+                throw new System.ArgumentException(String.Format("Error with index {0}", s.Length - 1));
+                return Int32.MinValue;
+            }
+
+            result += (last - 'A');
 
             return result;
         }
