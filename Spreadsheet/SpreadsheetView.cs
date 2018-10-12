@@ -54,11 +54,20 @@ namespace Spreadsheet
             if (sv != null)
             {
                 Log.Log.getLog().logMessage("Accessing cell ({0},{1}) in SpreadsheetView from Spreadsheet", e.RowIndex, e.ColumnIndex);
-                Cell c = sv._spreadsheet.getCell(e.RowIndex, e.ColumnIndex);
+                Cell c = sv._spreadsheet.getCell(e.ColumnIndex, e.RowIndex);
                 
                 if (c != null)
                 {
-                    c.setText(Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+                    var text = Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+
+                    if (text != null)
+                    {
+                        c.setText(text.ToString());   
+                    }
+                    else
+                    {
+                        //TODO raise error here to handle circular references
+                    }
                 }
                 else
                 {
