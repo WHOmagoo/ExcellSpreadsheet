@@ -74,7 +74,7 @@ namespace SpreadsheetEngine
             
             Cell cell = sender as Cell;
             
-            Log.Log.getLog().logMessage("Property changed {0}.", e.PropertyName);
+            Log.Log.getLog().logMessage("CellPropertyChangedHandler in Spreadsheet {0}.", e.PropertyName);
 
             if (cell != null)
             {
@@ -152,12 +152,12 @@ namespace SpreadsheetEngine
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null)
             {
-                Log.Log.getLog().logMessage("Cell property changed. We changed {0}", propertyName);
+                Log.Log.getLog().logMessage("Cell OnPropertChangedCell changed {0}", propertyName);
                 handler(sender, new PropertyChangedEventArgs(propertyName));
             }
             else
             {
-                Log.Log.getLog().logMessage("Handler was null in Cell");
+                Log.Log.getLog().logMessage("***Handler was null in Cell***");
             }
         }
         

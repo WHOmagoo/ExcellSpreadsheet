@@ -39,7 +39,7 @@ namespace SpreadsheetEngine
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null)
             {
-                Log.Log.getLog().logMessage("{0} property changed. We changed {1}", this, propertyName);
+                Log.Log.getLog().logMessage("Cell {0} OnPropertyChanged. Modified {1}", this, propertyName);
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
             else
