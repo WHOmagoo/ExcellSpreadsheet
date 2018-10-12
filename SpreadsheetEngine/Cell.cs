@@ -14,7 +14,7 @@ namespace SpreadsheetEngine
         
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public Cell(int row, int col)
+        public Cell(int col, int row)
         {
             RowIndex = row;
             ColIndex = col;

@@ -2,7 +2,7 @@ namespace SpreadsheetEngine
 {
     public class SimpleCell : Cell
     {
-        public SimpleCell(int row, int col) : base(row, col)
+        public SimpleCell(int col, int row) : base(col, row)
         {
             //calls the parent constructor
         }

@@ -31,7 +31,7 @@ namespace SpreadsheetEngine
             {
                 for(int col = 0; col < colCount; col++)
                 {
-                    Cell cell = new SimpleCell(row, col);
+                    Cell cell = new SimpleCell(col, row);
 
                     cell.PropertyChanged += cellPropertyChanged;
                         
@@ -52,7 +52,7 @@ namespace SpreadsheetEngine
             get { return colCount; }
         }
 
-        public Cell getCell(int row, int col)
+        public Cell getCell(int col, int row)
         {
             Tuple<int, int> key = new Tuple<int, int>(row, col);
             if (cells.ContainsKey(key))
@@ -92,12 +92,11 @@ namespace SpreadsheetEngine
 
                             try
                             {
-                                int rowNum = Int32.Parse(parts[0].Substring(1));
-                                int colNum = HeaderConverter.Convert(parts[1]);
+                                int colNum = HeaderConverter.Convert(parts[0].Substring(1));
+                                int rowNum = Int32.Parse(parts[1]);
 
-                                Cell copyValue = getCell(rowNum - 1, colNum);
-                                cell.setValue(copyValue.getValue());
-
+                                Cell copyValue = getCell(colNum, rowNum - 1);
+                                
                                 if (!valueLinks.ContainsKey(copyValue))
                                 {
                                     valueLinks.Add(copyValue, new List<Cell>());
