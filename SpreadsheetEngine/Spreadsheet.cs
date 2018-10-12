@@ -148,7 +148,7 @@ namespace SpreadsheetEngine
             }
         }
         
-        protected void OnPropertyChanged(Cell sender, string propertyName = null)
+        protected void OnPropertyChanged(object sender, string propertyName = null)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null)
