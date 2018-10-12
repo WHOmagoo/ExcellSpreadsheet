@@ -18,7 +18,7 @@ namespace SpreadsheetEngineTest
         }
 
         [Test]
-        public void TestHeaderConverterStringToChar()
+        public void TestHeaderConverterIntToString()
         {
             Assert.AreEqual("A", HeaderConverter.Convert(0));
             Assert.AreEqual("I", HeaderConverter.Convert(8));
@@ -32,7 +32,7 @@ namespace SpreadsheetEngineTest
         }
 
         [Test]
-        public void TestHeaderConverterCharToString()
+        public void TestHeaderConverterStringToInt()
         {
            Assert.AreEqual(0, HeaderConverter.Convert("A")); 
            Assert.AreEqual(8, HeaderConverter.Convert("I")); 
