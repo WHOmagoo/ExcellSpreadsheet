@@ -5,6 +5,7 @@ using System.Data;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace SpreadsheetEngine
 {
@@ -36,9 +37,7 @@ namespace SpreadsheetEngine
                     cell.PropertyChanged += cellPropertyChanged;
                         
                     cells.Add(new Tuple<int, int>(row, col), cell);
-
                 }
-
             }
         }
 
@@ -80,62 +79,8 @@ namespace SpreadsheetEngine
             {
                 switch (e.PropertyName)
                 {
-                    case "Text":
-                        if (cell.getText().StartsWith("="))
-                        {
-
-                            Console.WriteLine("Setting value for equation");
-                            //TODO refactor this to a class that can evaluate values for equations
-                            string cellContents = cell.getText();
-
-                            string[] parts = cellContents.Split(',');
-
-                            try
-                            {
-                                int colNum = HeaderConverter.Convert(parts[0].Substring(1));
-                                int rowNum = Int32.Parse(parts[1]);
-
-                                Cell copyValue = getCell(colNum, rowNum - 1);
-                                
-                                if (!valueLinks.ContainsKey(copyValue))
-                                {
-                                    valueLinks.Add(copyValue, new List<Cell>());
-                                }
-
-                                valueLinks[copyValue].Add(cell);
-                                Log.Log.getLog().logLine("{0} subscribing to {1}", cell, copyValue);
-                                cell.setValue(copyValue.getValue());
-                            }
-                            catch (Exception error)
-                            {
-                                cell.setValue("ERROR");
-                            }
-
-                        }
-                        else
-                        {
-                            cell.setValue(cell.getText());
-                        }
-
-                        //TODO check if the new text is an equation or not and update the value of the cell accordingly
-                        Log.Log.getLog().logMessage("({0},{1}) Text = {2}", cell.ColIndex, cell.RowIndex,
-                            cell.getText());
-
-                        OnPropertyChanged(cell, "Text");
-                        break;
-                    case "Value":
-                        Log.Log.getLog().logLine("{0}'s value was changed to {1}", cell, cell.getValue());
-                        if (valueLinks.ContainsKey(cell))
-                        {
-                            foreach (var cellLinked in valueLinks[cell])
-                            {
-                                Log.Log.getLog().logLine("Updating {0}'s value from {1}", cellLinked, cell);
-                                cellLinked.setValue(cell.getValue());
-                            }
-                        }
-                        
-                        OnPropertyChanged(cell, "Value");
-                        break;
+                    case "Text": OnCellTextChange(cell); break;
+                    case "Value": OnValueChangedEvent(cell); break;
                     default : Log.Log.getLog().logLine("Unknown property changed for {0},{1}", cell.RowIndex, cell.ColIndex);
                         break;
                 }
@@ -147,13 +92,74 @@ namespace SpreadsheetEngine
                 OnPropertyChanged(sender, e.PropertyName);
             }
         }
-        
+
+        private void OnCellTextChange(Cell cell)
+        {
+            if (cell.getText().StartsWith("="))
+            {
+                Console.WriteLine("Setting value for equation");
+                //TODO refactor this to a class that can evaluate values for equations
+                string cellContents = cell.getText();
+
+                
+//                Regex split = new Regex("([-+*/)/(])");
+//                split.Split(cellContents);
+                string[] parts = cellContents.Split(',');
+
+                try
+                {
+                    int colNum = HeaderConverter.Convert(parts[0].Substring(1));
+                    int rowNum = Int32.Parse(parts[1]);
+
+                    Cell copyValue = getCell(colNum, rowNum - 1);
+
+                    if (!valueLinks.ContainsKey(copyValue))
+                    {
+                        valueLinks.Add(copyValue, new List<Cell>());
+                    }
+
+                    valueLinks[copyValue].Add(cell);
+                    Log.Log.getLog().logLine("{0} subscribing to {1}", cell, copyValue);
+                    cell.setValue(copyValue.getValue());
+                }
+                catch (Exception error)
+                {
+                    cell.setValue("ERROR");
+                }
+            }
+            else
+            {
+                cell.setValue(cell.getText());
+            }
+
+            //TODO check if the new text is an equation or not and update the value of the cell accordingly
+            Log.Log.getLog().logMessage("({0},{1}) Text = {2}", cell.ColIndex, cell.RowIndex,
+                cell.getText());
+
+            OnPropertyChanged(cell, "Text");
+        }
+
+        private void OnValueChangedEvent(Cell cell)
+        {
+            Log.Log.getLog().logLine("{0}'s value was changed to {1}", cell, cell.getValue());
+            if (valueLinks.ContainsKey(cell))
+            {
+                foreach (var cellLinked in valueLinks[cell])
+                {
+                    Log.Log.getLog().logLine("Updating {0}'s value from {1}", cellLinked, cell);
+                    cellLinked.setValue(cell.getValue());
+                }
+            }
+            
+            OnPropertyChanged(cell, "Value");
+        }
+
         protected void OnPropertyChanged(object sender, string propertyName = null)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null)
             {
-                Log.Log.getLog().logMessage("Cell OnPropertChangedCell changed {0}", propertyName);
+                Log.Log.getLog().logMessage("Cell OnPropertyChangedCell changed {0}", propertyName);
                 handler(sender, new PropertyChangedEventArgs(propertyName));
             }
             else
