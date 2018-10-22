@@ -10,6 +10,7 @@ namespace CptS321
     public class ExpTree
     {
         private ExpNode root;
+        private string expression;
         
         private static string operatorsRegexString = @"(?<operator>[\/+\-\*])";
         private static string unaryOperatorsRegexString = @"(?<unaryOperator>\-)";
@@ -17,6 +18,7 @@ namespace CptS321
         
         public ExpTree(String expression)
         {
+            this.expression = expression;
             String regexString = String.Format(@"({0}|{1})", variableNamematch, operatorsRegexString);
             Regex regex = new Regex(regexString);
 
@@ -101,6 +103,11 @@ namespace CptS321
         public double Eval()
         {
             return root.Eval();
+        }
+
+        public override string ToString()
+        {
+            return expression;
         }
     }
 }

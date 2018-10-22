@@ -43,7 +43,6 @@
     <Compile Include="ExpressionParser.cs" />
     <Compile Include="ExpTree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Run.cs" />
     <Compile Include="MultiplicationOperator.cs" />
     <Compile Include="NegativeOperator.cs" />
     <Compile Include="NumericalValueNode.cs" />
