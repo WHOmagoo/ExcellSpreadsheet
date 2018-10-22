@@ -5,13 +5,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{073DEBAB-202F-41BF-87D1-1FB8DBE309F4}</ProjectGuid>
+    <ProjectGuid>{1071FB9C-2A7E-4EB0-9DFA-12202441CE28}</ProjectGuid>
     <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SpreadsheetEngineTest</RootNamespace>
-    <AssemblyName>SpreadsheetEngineTest</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <RootNamespace>ExpressionTreeTest</RootNamespace>
+    <AssemblyName>ExpressionTreeTest</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=3.11.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
-      <HintPath>..\packages\NUnit.3.11.0\lib\net45\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnit.3.11.0\lib\net35\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -51,10 +51,6 @@
     <ProjectReference Include="..\CptS321\CptS321.csproj">
       <Project>{f1bc790e-cabf-4ad0-9e6e-cb8eda8fa422}</Project>
       <Name>CptS321</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SpreadsheetEngine\SpreadsheetEngine.csproj">
-      <Project>{9c4e95a5-22ae-46a7-aa9d-1a5607426394}</Project>
-      <Name>SpreadsheetEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
