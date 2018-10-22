@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetEngineTest", "Sp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Log", "Log\Log.csproj", "{6BDEBD08-24E0-4EF7-99A2-B153139522CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CptS321", "CptS321\CptS321.csproj", "{F1BC790E-CABF-4AD0-9E6E-CB8EDA8FA422}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{6BDEBD08-24E0-4EF7-99A2-B153139522CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BDEBD08-24E0-4EF7-99A2-B153139522CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BDEBD08-24E0-4EF7-99A2-B153139522CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1BC790E-CABF-4AD0-9E6E-CB8EDA8FA422}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1BC790E-CABF-4AD0-9E6E-CB8EDA8FA422}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1BC790E-CABF-4AD0-9E6E-CB8EDA8FA422}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1BC790E-CABF-4AD0-9E6E-CB8EDA8FA422}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
