@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using CptS321.Properties;
 using SpreadsheetEngine;
@@ -74,7 +73,7 @@ namespace CptS321
                 match = match.NextMatch();
             }
             
-            if (expressions.Count() == 0)
+            if (expressions.Count == 0)
             {
                 throw new Exception("Nothing entered");
             }

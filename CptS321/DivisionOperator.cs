@@ -8,5 +8,9 @@ namespace CptS321
         {
             return left.Eval() / right.Eval();
         }
+
+        public DivisionOperator() : base(2)
+        {
+        }
     }
 }

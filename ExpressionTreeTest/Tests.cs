@@ -33,5 +33,27 @@ namespace ExpressionTreeTest
             
             Assert.AreEqual(6, exp.Eval());
         }
+
+        [Test]
+        public void TestOrderOfOperations()
+        {
+            ExpTree exp = new ExpTree("2+3*4");
+            Assert.AreEqual(14, exp.Eval());
+
+            exp = new ExpTree("2*3+4*5");
+            Assert.AreEqual(26, exp.Eval());
+
+            exp = new ExpTree("1+2*8/4");
+            Assert.AreEqual(5, exp.Eval());
+
+            exp = new ExpTree("8*4/2-2/2*9");
+            Assert.AreEqual(7, exp.Eval());
+        }
+
+        [Test]
+        public void TestParenthesis()
+        {
+            ExpTree exp = new ExpTree("()");
+        }
     }
 }

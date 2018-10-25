@@ -9,5 +9,9 @@ namespace CptS321
         {
             return left.Eval() * right.Eval();
         }
+
+        public MultiplicationOperator() : base(2)
+        {
+        }
     }
 }

@@ -18,8 +18,11 @@ namespace CptS321
         protected internal ExpNode right;
         protected internal ExpNode parent;
 
+        private int prescedence;
+        
         protected ExpNode()
         {
+            prescedence = 0;
         }
 
         public virtual void SetVar(string varName, double varValue)
@@ -34,6 +37,16 @@ namespace CptS321
 
                 right.SetVar(varName, varValue);
             }
+        }
+
+        public int getPrescedence()
+        {
+            return prescedence;
+        }
+
+        public void setPresedence(int newPrescedence)
+        {
+            prescedence = newPrescedence;
         }
 
         public ExpNode add(ExpNode node)

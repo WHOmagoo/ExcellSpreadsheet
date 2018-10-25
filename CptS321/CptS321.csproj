@@ -35,6 +35,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +43,7 @@
     <Compile Include="DivisionOperator.cs" />
     <Compile Include="ExpressionParser.cs" />
     <Compile Include="ExpTree.cs" />
+    <Compile Include="ParenthasesOperator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MultiplicationOperator.cs" />
     <Compile Include="NegativeOperator.cs" />

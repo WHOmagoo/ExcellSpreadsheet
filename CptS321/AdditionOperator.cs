@@ -10,5 +10,9 @@ namespace CptS321
         {
             return left.Eval() + right.Eval();
         }
+
+        public AdditionOperator() : base(1)
+        {
+        }
     }
 }

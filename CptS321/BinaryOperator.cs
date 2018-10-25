@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 
 namespace CptS321
 {
@@ -14,27 +15,32 @@ namespace CptS321
                 return true;
             }
             
-            
             if (!right.inClassAdd(node))
             {
-                if (parent != null)
+                if (getPrescedence() < node.getPrescedence())
                 {
-                    if (parent.left == this)
-                    {
-                        parent.left = node;
-                    } else if (parent.right == this)
-                    {
-                        parent.right = node;
-                    }
+                    node.parent = this;
+                    node.left = right;
+                    node.left.parent = node;
+                    right = node;
+                    return true;
                 }
                 
-                node.parent = parent;
-                parent = node;
-                node.left = this;
+                if (parent == null)
+                {
+                    parent = node;
+                    node.left = this;
+                    return true;
+                }
+
+                return false;
             }
 
             return true;
         }
-        
+
+        protected BinaryOperator(int prescedence) : base(prescedence)
+        {
+        }
     }
 }

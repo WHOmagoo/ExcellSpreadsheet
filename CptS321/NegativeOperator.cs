@@ -6,5 +6,9 @@ namespace CptS321.Properties
         {
             return -1 * right.Eval();
         }
+
+        public NegativeOperator() : base(1)
+        {
+        }
     }
 }
