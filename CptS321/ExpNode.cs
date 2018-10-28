@@ -13,17 +13,17 @@ namespace CptS321
     public abstract class ExpNode
     {
         protected string varName;
-
-        protected internal ExpNode left;
-        protected internal ExpNode right;
-        protected internal ExpNode parent;
-
-        private int prescedence;
         
+        private int prescedence;
+
         protected ExpNode()
         {
             prescedence = 0;
         }
+        
+        public ExpNode left { get;    private set; }
+        public ExpNode right { get;   private set; }
+        public ExpNode parent { get;  private set; }
 
         public virtual void SetVar(string varName, double varValue)
         {
@@ -91,6 +91,26 @@ namespace CptS321
                 node.left = this;
                 return true;
             }
+        }
+
+        protected internal void setParent(ExpNode newParent)
+        {
+            if (parent != null)
+            {
+                parent.right = newParent;
+            }
+
+            newParent.parent = parent;
+            newParent.left = this;
+            parent = newParent;
+
+
+        }
+
+        protected internal void setChild(ExpNode newChild)
+        {
+            newChild.parent = this;
+            right = newChild;
         }
 
         public abstract double Eval();

@@ -8,17 +8,19 @@ namespace CptS321
         {
             if (right == null)
             {
-                right = node;
-                node.parent = this;
+                setChild(node);
+//                right = node;
+//                node.parent = this;
                 return true;
             }
 
             if (!right.inClassAdd(node))
             {
-                node.left = right;
-                node.parent = this;
-                right.parent = node;
-                right = node;
+                right.setParent(node);
+//                node.left = right;
+//                node.parent = this;
+//                right.parent = node;
+//                right = node;
             }
 
             return true;

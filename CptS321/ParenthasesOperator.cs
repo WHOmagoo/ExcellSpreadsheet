@@ -21,8 +21,8 @@ namespace CptS321
             ParenthasesOperator adding = node as ParenthasesOperator;
             if (adding != null && isClosingParenthesis)
             {
-                parent.right = right;
-                right.parent = parent;
+//                parent.right = right;
+//                right.parent = parent;
                 return true;
             }
 

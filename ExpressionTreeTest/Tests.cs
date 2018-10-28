@@ -50,10 +50,11 @@ namespace ExpressionTreeTest
             Assert.AreEqual(7, exp.Eval());
         }
 
-        [Test]
-        public void TestParenthesis()
-        {
-            ExpTree exp = new ExpTree("()");
-        }
+//        [Test]
+//        public void TestParenthesis()
+//        {
+//            ExpTree exp = new ExpTree("()");
+//            Assert.True(false);
+//        }
     }
 }

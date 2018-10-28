@@ -1,5 +1,4 @@
 using System;
-using System.Text.RegularExpressions;
 
 namespace CptS321
 {
@@ -10,8 +9,9 @@ namespace CptS321
         {
             if (right == null)
             {
-                node.parent = this;
-                right = node;
+                setChild(node);
+//                node.parent = this;
+//                right = node;
                 return true;
             }
             
@@ -19,17 +19,19 @@ namespace CptS321
             {
                 if (getPrescedence() < node.getPrescedence())
                 {
-                    node.parent = this;
-                    node.left = right;
-                    node.left.parent = node;
-                    right = node;
+                    right.setParent(node);
+//                    node.parent = this;
+//                    node.left = right;
+//                    node.left.parent = node;
+//                    right = node;
                     return true;
                 }
                 
                 if (parent == null)
                 {
-                    parent = node;
-                    node.left = this;
+                    setParent(node);
+//                    parent = node;
+//                    node.left = this;
                     return true;
                 }
 
