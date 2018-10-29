@@ -13,9 +13,16 @@ namespace SpreadsheetEngine
             this.value = value;
         }
 
-        protected internal override bool inClassAdd(ExpNode node)
+        public override void add(ExpNode node)
         {
-            return false;
+            if (parent == null)
+            {
+                setParent(node);
+            }
+            else
+            {
+                parent.add(node);
+            }
         }
 
         public override double Eval()

@@ -19,11 +19,32 @@ namespace CptS321
         protected ExpNode()
         {
             prescedence = 0;
+            left = null;
+            right = null;
+            parent = null;
         }
-        
-        public ExpNode left { get;    private set; }
-        public ExpNode right { get;   private set; }
-        public ExpNode parent { get;  private set; }
+
+        public ExpNode left {private set; get;}
+        public ExpNode right {private set; get;}
+        public ExpNode parent {private set; get;}
+
+//        public ExpNode left
+//        {
+//            get { return _left; }
+//            private set { _left = value; }
+//        }
+//        
+//        public ExpNode right
+//        {
+//            get { return _right; }
+//            private set { _right = value; }
+//        }
+//        
+//        public ExpNode parent
+//        {
+//            get { return _parent; }
+//            private set { _parent = value; }
+//        }
 
         public virtual void SetVar(string varName, double varValue)
         {
@@ -49,49 +70,12 @@ namespace CptS321
             prescedence = newPrescedence;
         }
 
-        public ExpNode add(ExpNode node)
+        public ExpNode findRoot()
         {
-            if (!inClassAdd(node))
-            {
-                node.parent = parent;
-                node.left = this;
-                parent = node;
-            }
-            
-
-            ExpNode root = this;
-            while (root.parent != null)
-            {
-                root = root.parent;
-            }
-
-            return root;
+            return parent == null ? this : parent.findRoot();
         }
-        
-        protected internal virtual bool inClassAdd(ExpNode node)
-        {
-            if (right == null)
-            {
-                right = node;
-                node.parent = this;
-                return true;
-            }
-            
-            if (right is BinaryOperator)
-            {
-                if (!right.inClassAdd(node))
-                {
-                    
-                }
 
-                return true;
-            } else 
-            {
-                parent = node;
-                node.left = this;
-                return true;
-            }
-        }
+        public abstract void add(ExpNode node); 
 
         protected internal void setParent(ExpNode newParent)
         {
@@ -110,6 +94,11 @@ namespace CptS321
         protected internal void setChild(ExpNode newChild)
         {
             newChild.parent = this;
+            if (right != null)
+            {
+                left = right;
+            }
+
             right = newChild;
         }
 

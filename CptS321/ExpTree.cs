@@ -12,24 +12,27 @@ namespace CptS321
         private string expression;
         
         private static string operatorsRegexString = @"(?<operator>[\/+\-\*])";
-        private static string unaryOperatorsRegexString = @"(?<unaryOperator>\-)";
+        private static string unaryOperatorsRegexString = @"(?<unaryOperator>[\-\(\)])";
         private static string variableNamematch = @"(?<variableName>\w+)";
         
         public ExpTree(String expression)
         {
             this.expression = expression;
-            String regexString = String.Format(@"({0}|{1})", variableNamematch, operatorsRegexString);
+            String regexString = String.Format(@"({0}|{1}|{2})", variableNamematch, operatorsRegexString, unaryOperatorsRegexString);
             Regex regex = new Regex(regexString);
 
             Match match = Regex.Match(expression, regexString);
+            
             List<ExpNode> expressions = new List<ExpNode>();
+            
             bool prevIsOperator = true;
-            int index = 0;
-
+            int unclosedParenthesesCount = 0;
+            
             while (match.Success)   
             {
 
                 bool isOperator = match.Groups["operator"].Success;
+                bool isUnaryOperator = match.Groups["unaryOperator"].Success;
 
                 if (isOperator)
                 {
@@ -46,6 +49,30 @@ namespace CptS321
                     {
                         throw new Exception("Malformed input, looking for operator");
                     }
+                } else if (isUnaryOperator)
+                {
+                    ExpNode op = OperatorFactory.makeUnaryOperator(match.Value);
+                    ParenthesesOperator pOP = op as ParenthesesOperator;
+                    if (pOP != null)
+                    {
+                        if (pOP.isClosingParenthesis())
+                        {
+                            isOperator = false;
+                            unclosedParenthesesCount--;
+                        }
+                        else
+                        {
+                            isOperator = true;
+                            unclosedParenthesesCount++;
+                        }
+
+                        if (unclosedParenthesesCount < 0)
+                        {
+                            throw new Exception("Too many closing parenthases");
+                        }
+                    }
+                    expressions.Add(op);
+
                 }
                 else
                 {
@@ -78,17 +105,28 @@ namespace CptS321
                 throw new Exception("Nothing entered");
             }
 
+            if (unclosedParenthesesCount != 0)
+            {
+                throw new Exception("Too many open parentheses entered");
+            }
+
+
+            ExpNode prev = null;
+            
             foreach (ExpNode node in expressions)
             {
-                if (root == null)
+                if (prev == null)
                 {
-                    root = node;
+                    prev = node;
                 }
                 else
                 {
-                    root = root.add(node);
+                    prev.add(node);
+                    prev = node;
                 }
             }
+
+            root = prev.findRoot();
         }
 
         public void SetVar(string varName, double varValue)

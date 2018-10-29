@@ -22,12 +22,18 @@ namespace CptS321
 
             return null;
         }
-
+        
         public static UnaryOperator makeUnaryOperator(string symbol)
         {
             if (symbol.Equals("-"))
             {
                 return new NegativeOperator();
+            }else if (symbol.Equals("("))
+            {
+                return new ParenthesesOperator(false);
+            }else if (symbol.Equals(")"))
+            {
+                return new ParenthesesOperator(true);
             }
 
             return null;

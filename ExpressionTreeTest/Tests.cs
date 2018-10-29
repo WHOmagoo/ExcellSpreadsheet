@@ -15,6 +15,7 @@ namespace ExpressionTreeTest
             Assert.AreEqual(2, new ExpTree("8/4").Eval());
             
         }
+        
 
         [Test]
         public void TestExpTreeVariable()
@@ -50,11 +51,46 @@ namespace ExpressionTreeTest
             Assert.AreEqual(7, exp.Eval());
         }
 
-//        [Test]
-//        public void TestParenthesis()
-//        {
-//            ExpTree exp = new ExpTree("()");
-//            Assert.True(false);
-//        }
+        [Test]
+        public void TestParenthesisSimple()
+        {
+            ExpTree exp = new ExpTree("(1+2)");
+            Assert.AreEqual(3, exp.Eval());
+        }
+
+        [Test]
+        public void TestParenthesisLeft()
+        {
+            ExpTree exp = new ExpTree("(1+2)*3");
+            Assert.AreEqual(9, exp.Eval());
+        }
+
+        [Test]
+        public void TestParenthesisRight()
+        {
+            ExpTree exp = new ExpTree("2*(1+3)");
+            Assert.AreEqual(8, exp.Eval());
+        }
+
+        [Test]
+        public void TestParenthesisBoth()
+        {
+            ExpTree exp = new ExpTree("(2+3)*(1+4)");
+            Assert.AreEqual(25, exp.Eval());
+        }
+
+        [Test]
+        public void TestNestedParenthesis()
+        {
+            ExpTree exp = new ExpTree("((1+2)*3)*4");
+            Assert.AreEqual(36, exp.Eval());
+        }
+
+        [Test]
+        public void TestMutlipleNestedParenthesis()
+        {
+            ExpTree exp = new ExpTree("((1+2)*(3-2))*(4/2)");
+            Assert.AreEqual(6, exp.Eval());
+        }
     }
 }
