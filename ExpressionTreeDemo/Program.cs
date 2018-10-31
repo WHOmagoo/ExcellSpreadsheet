@@ -1,5 +1,5 @@
-﻿using System;
-using CptS321;
+﻿using CptS321;
+using System;
 
 namespace ExpressionTreeDemo
 {
@@ -12,7 +12,6 @@ namespace ExpressionTreeDemo
         
         public static void Main(string[] args)
         {
-            
             newExpression();
             int response = getResponse();
 
@@ -106,8 +105,8 @@ namespace ExpressionTreeDemo
             {
                 Console.WriteLine("  {0} = {1}", i, names[i]);
             }
-            
-            Console.Write("  {0} = Quit", functions.Length);
+
+            Console.WriteLine("  {0} = Quit", functions.Length);
         }
         
     }
