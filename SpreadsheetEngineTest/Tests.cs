@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SpreadsheetEngine;
 
 namespace SpreadsheetEngineTest
@@ -42,6 +43,39 @@ namespace SpreadsheetEngineTest
            Assert.AreEqual(51, HeaderConverter.Convert("AZ")); 
            Assert.AreEqual(52, HeaderConverter.Convert("BA")); 
            Assert.AreEqual(702, HeaderConverter.Convert("AAA")); 
+        }
+
+        [Test]
+        public void TestGetCellLocationA1()
+        {
+            Assert.AreEqual(Tuple.Create(0,0), HeaderConverter.getCellLocation("A1"));
+        }
+        
+        [Test]
+        public void TestGetCellLocationCX456()
+        {
+            Assert.AreEqual(Tuple.Create(HeaderConverter.Convert("CX"),455), HeaderConverter.getCellLocation("CX456"));
+        }
+
+        [Test]
+        public void TestGetCellLocationThrowsErrorNegativeNumber()
+        {
+            var error = Assert.Throws<ArgumentException>(() => HeaderConverter.getCellLocation("AB-32"));
+            Assert.That(error.Message, Is.EqualTo("The supplied string did not match a valid cell form"));
+        }
+        
+        [Test]
+        public void TestGetCellLocationThrowsErrorMissingNumber()
+        {
+            var error = Assert.Throws<ArgumentException>(() => HeaderConverter.getCellLocation("AB"));
+            Assert.That(error.Message, Is.EqualTo("The supplied string did not match a valid cell form"));
+        }
+        
+        [Test]
+        public void TestGetCellLocationThrowsErrorMissingLetters()
+        {
+            var error = Assert.Throws<ArgumentException>(() => HeaderConverter.getCellLocation("57488"));
+            Assert.That(error.Message, Is.EqualTo("The supplied string did not match a valid cell form"));
         }
     }
 }
