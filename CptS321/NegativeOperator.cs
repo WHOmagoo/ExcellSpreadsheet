@@ -1,4 +1,4 @@
-namespace CptS321.Properties
+namespace CptS321
 {
     public class NegativeOperator : UnaryOperator
     {   

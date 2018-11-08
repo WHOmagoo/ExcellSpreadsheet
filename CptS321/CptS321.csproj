@@ -44,6 +44,7 @@
     <Compile Include="ExpressionParser.cs" />
     <Compile Include="ExpTree.cs" />
     <Compile Include="ParenthesesOperator.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MultiplicationOperator.cs" />
     <Compile Include="NegativeOperator.cs" />
@@ -56,12 +57,6 @@
     <Compile Include="UnaryOperator.cs" />
     <Compile Include="Value.cs" />
     <Compile Include="VariableNode.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SpreadsheetEngine\SpreadsheetEngine.csproj">
-      <Project>{9c4e95a5-22ae-46a7-aa9d-1a5607426394}</Project>
-      <Name>SpreadsheetEngine</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

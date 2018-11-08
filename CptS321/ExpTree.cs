@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
-using CptS321.Properties;
-using SpreadsheetEngine;
+using CptS321.Annotations;
 
 namespace CptS321
 {

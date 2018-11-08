@@ -1,5 +1,4 @@
 using System;
-using SpreadsheetEngine;
 
 namespace CptS321
 {
@@ -8,9 +7,9 @@ namespace CptS321
         private Value value;
         private string name;
 
-        public VariableNode(string variableName)
+        public VariableNode(Value val)
         {
-            name = variableName;
+            value = val;
         }
 
         public override void SetVar(string varName, double value)

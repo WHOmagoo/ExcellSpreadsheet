@@ -1,5 +1,3 @@
-using SpreadsheetEngine;
-
 namespace CptS321
 {
     public class MultiplicationOperator : BinaryOperator

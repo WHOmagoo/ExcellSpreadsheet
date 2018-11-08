@@ -1,5 +1,3 @@
-using CptS321.Properties;
-
 namespace CptS321
 {
     public class OperatorFactory

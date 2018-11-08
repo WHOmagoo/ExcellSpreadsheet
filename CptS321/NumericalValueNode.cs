@@ -1,8 +1,4 @@
-using System;
-using CptS321;
-using SpreadsheetEngine;
-
-namespace SpreadsheetEngine
+namespace CptS321
 {
     public class NumericalValueNode : ExpNode
     {

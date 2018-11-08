@@ -1,4 +1,4 @@
-namespace SpreadsheetEngine
+namespace CptS321
 {
     public class Value
     {
