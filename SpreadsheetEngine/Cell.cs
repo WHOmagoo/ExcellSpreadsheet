@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using CptS321;
 
 namespace SpreadsheetEngine
 {
@@ -11,6 +12,8 @@ namespace SpreadsheetEngine
 
         private string Text;
         private string Value;
+
+        private ExpTree expressionTree;
         
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -18,11 +21,29 @@ namespace SpreadsheetEngine
         {
             RowIndex = row;
             ColIndex = col;
+
+            Text = "";
+            Value = "";
         }
 
         public string getText()
         {
             return Text;
+        }
+
+        public void setExpTree(ExpTree newExpTree)
+        {
+            expressionTree = newExpTree;
+
+            try
+            {
+               setValue(expressionTree.Eval().ToString());
+                
+            }
+            catch (Exception e)
+            {
+                setValue("#VALUE");
+            }
         }
 
         public void setText(string newText)
@@ -34,7 +55,7 @@ namespace SpreadsheetEngine
             }
         }
 
-        protected void OnPropertyChanged(string propertyName = null)
+        private void OnPropertyChanged(string propertyName = null)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null)
@@ -45,6 +66,25 @@ namespace SpreadsheetEngine
             else
             {
                 Log.Log.getLog().logMessage("Handler was null in Cell");
+            }
+        }
+
+        public void onLinkChange(object sender, PropertyChangedEventArgs e)
+        {
+            Cell link = sender as Cell;
+
+            if ("Value".Equals(e.PropertyName) &&link != null)
+            {
+                string cellName = HeaderConverter.getCellName(new Tuple<int, int>(link.ColIndex, link.RowIndex));
+                try
+                {
+                    expressionTree.SetVar(cellName, Int32.Parse(link.getValue()));
+                    setValue(expressionTree.Eval().ToString());
+                }
+                catch (Exception exception)
+                {
+                    setValue("#VALUE");
+                }
             }
         }
 

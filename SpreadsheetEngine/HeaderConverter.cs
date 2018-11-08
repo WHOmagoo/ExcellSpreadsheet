@@ -1,6 +1,7 @@
 using System;
 using System.CodeDom;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text.RegularExpressions;
 
 namespace SpreadsheetEngine
 {
@@ -91,6 +92,29 @@ namespace SpreadsheetEngine
             result += (last - 'A');
 
             return result;
+        }
+
+        //s should be a proper reference to a cell such as A5 or BCD567
+        public static Tuple<int, int> getCellLocation(string s)
+        {
+            var match = Regex.Match(s, @"[A-Za-z]+\d+");
+
+            if (match.Success)
+            {
+                int column = Convert(Regex.Match(s, @"[A-Za-z]+").Value);
+                int row = Int32.Parse(Regex.Match(s, @"\d+").Value) - 1;
+
+                return Tuple.Create(column, row);
+            }
+            else
+            {
+                throw new ArgumentException("The supplied string did not match a valid cell form");
+            }
+        }
+
+        public static string getCellName(Tuple<int, int> coordinates)
+        {
+            return $"{Convert(coordinates.Item1)}{coordinates.Item2 + 1}";
         }
     }    
 }

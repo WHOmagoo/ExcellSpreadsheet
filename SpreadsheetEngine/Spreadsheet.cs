@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text.RegularExpressions;
+using CptS321;
 
 namespace SpreadsheetEngine
 {
@@ -98,34 +99,68 @@ namespace SpreadsheetEngine
             if (cell.getText().StartsWith("="))
             {
                 Console.WriteLine("Setting value for equation");
-                //TODO refactor this to a class that can evaluate values for equations
-                string cellContents = cell.getText();
-
-                
-//                Regex split = new Regex("([-+*/)/(])");
-//                split.Split(cellContents);
-                string[] parts = cellContents.Split(',');
 
                 try
                 {
-                    int colNum = HeaderConverter.Convert(parts[0].Substring(1));
-                    int rowNum = Int32.Parse(parts[1]);
+                    ExpTree expressionTree = new ExpTree(cell.getText().Substring(1));
 
-                    Cell copyValue = getCell(colNum, rowNum - 1);
-
-                    if (!valueLinks.ContainsKey(copyValue))
+                    foreach (string name in expressionTree.getVariableNames())
                     {
-                        valueLinks.Add(copyValue, new List<Cell>());
-                    }
+                        Tuple<int, int> location = HeaderConverter.getCellLocation(name);
 
-                    valueLinks[copyValue].Add(cell);
-                    Log.Log.getLog().logLine("{0} subscribing to {1}", cell, copyValue);
-                    cell.setValue(copyValue.getValue());
+                        Cell link = getCell(location.Item1, location.Item2);
+
+                        try
+                        {
+                            int value = Int32.Parse(link.getValue());
+
+                            expressionTree.SetVar(name, value);
+                        }
+                        catch (Exception e)
+                        {
+                            //We could not parse the value of the cell, continue anyways
+                        }
+
+                        link.PropertyChanged += cell.onLinkChange;
+
+                    }
+                    
+                    cell.setExpTree(expressionTree);
                 }
-                catch (Exception error)
+                catch (Exception e)
                 {
                     cell.setValue("ERROR");
                 }
+
+
+//                //TODO refactor this to a class that can evaluate values for equations
+//                string cellContents = cell.getText();
+//
+//                
+////                Regex split = new Regex("([-+*/)/(])");
+////                split.Split(cellContents);
+//                string[] parts = cellContents.Split(',');
+//
+//                try
+//                {
+//                    int colNum = HeaderConverter.Convert(parts[0].Substring(1));
+//                    int rowNum = Int32.Parse(parts[1]);
+//
+//                    Cell copyValue = getCell(colNum, rowNum - 1);
+//
+//                    if (!valueLinks.ContainsKey(copyValue))
+//                    {
+//                        valueLinks.Add(copyValue, new List<Cell>());
+//                    }
+//
+//                    valueLinks[copyValue].Add(cell);
+//                    Log.Log.getLog().logLine("{0} subscribing to {1}", cell, copyValue);
+//                    cell.setValue(copyValue.getValue());
+//                }
+//                catch (Exception error)
+//                {
+//                    cell.setValue("ERROR");
+//                }
             }
             else
             {

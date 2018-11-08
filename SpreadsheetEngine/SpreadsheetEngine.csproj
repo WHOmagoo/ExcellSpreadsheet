@@ -45,6 +45,10 @@
     <Compile Include="Spreadsheet.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CptS321\CptS321.csproj">
+      <Project>{f1bc790e-cabf-4ad0-9e6e-cb8eda8fa422}</Project>
+      <Name>CptS321</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Log\Log.csproj">
       <Project>{6bdebd08-24e0-4ef7-99a2-b153139522ce}</Project>
       <Name>Log</Name>
