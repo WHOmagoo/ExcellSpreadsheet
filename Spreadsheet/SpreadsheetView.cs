@@ -9,6 +9,8 @@ namespace Spreadsheet
     public class SpreadsheetView : DataGridView
     {
 
+        private volatile bool userUpdatedCell = false;
+
         private SpreadsheetEngine.Spreadsheet _spreadsheet;
         public SpreadsheetView(SpreadsheetEngine.Spreadsheet s)
         {
@@ -42,8 +44,14 @@ namespace Spreadsheet
 
             
             CellValueChanged += SpreadsheetView_CellValueChanged;
+            CellLeave += SpreadsheetView_CellLeft;
             _spreadsheet.PropertyChanged += SpreadsheetView_SpreadsheetCellUpdated;
             
+        }
+
+        private void SpreadsheetView_CellLeft(object sender, DataGridViewCellEventArgs e)
+        {
+            userUpdatedCell = true;
         }
 
         private void SpreadsheetView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -60,13 +68,10 @@ namespace Spreadsheet
                 {
                     var text = Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
 
-                    if (text != null)
+                    if (userUpdatedCell)
                     {
+                        userUpdatedCell = false;
                         c.setText(text.ToString());   
-                    }
-                    else
-                    {
-                        //TODO raise error here to handle circular references
                     }
                 }
                 else
