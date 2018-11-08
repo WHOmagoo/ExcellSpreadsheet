@@ -6,7 +6,7 @@ using CptS321.Annotations;
 
 namespace CptS321
 {
-    public class ExpTree
+    public class ExpTree : INotifyPropertyChanged
     {
         private ExpNode root;
         private string expression;
@@ -14,6 +14,10 @@ namespace CptS321
         private static string operatorsRegexString = @"(?<operator>[\/+\-\*])";
         private static string unaryOperatorsRegexString = @"(?<unaryOperator>[\-\(\)])";
         private static string variableNamematch = @"(?<variableName>\w+)";
+
+        private Dictionary<string, Value> _variableNodes = new Dictionary<string, Value>();
+        
+
         
         public ExpTree(String expression)
         {
@@ -86,8 +90,13 @@ namespace CptS321
                         }
                         catch (Exception e)
                         {
-                            ExpNode expNode = new VariableNode(match.Value);
-                            expressions.Add(expNode);
+                            if (!_variableNodes.ContainsKey(match.Value))
+                            {
+                                Value val = new Value(0);
+                                _variableNodes.Add(match.Value, val);
+                            }
+
+                            expressions.Add(new VariableNode(_variableNodes[match.Value]));
                         }
                     }
                     else
@@ -128,13 +137,18 @@ namespace CptS321
 
             root = prev.findRoot();
         }
-
+        
         public void SetVar(string varName, double varValue)
         {
-            if (varName != null)
+            if (_variableNodes.ContainsKey(varName))
             {
-                root.SetVar(varName, varValue);
+                _variableNodes[varName].setValue(varValue);
             }
+        }
+
+        public List<string> getVariableNames()
+        {
+            return new List<string>(_variableNodes.Keys);
         }
 
         public double Eval()
@@ -145,6 +159,14 @@ namespace CptS321
         public override string ToString()
         {
             return expression;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void onVariableNodeChanged(VariableNode node)
+        {
+            PropertyChanged?.Invoke(node, new PropertyChangedEventArgs("ValueNode"));
         }
     }
 }
