@@ -25,6 +25,8 @@ namespace Spreadsheet
         private bool equationChangedByProgram = false;
         private TableLayoutPanel _layout;
 
+        private AboutForm form = new AboutForm();
+        
         public Form1(String tittle = "")
         {
             Text = tittle;
@@ -70,7 +72,20 @@ namespace Spreadsheet
             Open.Text = "Open";
             Open.Click += OnOpen;
             
+            var About = new ToolStripMenuItem();
+            About.Name = "About";
+            About.Text = "About";
+            About.Click += OnAbout;
+
+            menuStrip.Items.Add(About);
+            
             Controls.Add(menuStrip);
+        }
+
+        private void OnAbout(object sender, EventArgs e)
+        {
+            form.Hide();
+            form.Show();
         }
 
         private void InitializeEquationText()
