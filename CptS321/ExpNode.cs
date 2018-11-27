@@ -1,4 +1,9 @@
+using System;
+using System.Runtime.Serialization;
+
 namespace CptS321 {
+    
+    [Serializable]
     public abstract class ExpNode
     {
         protected string varName;
@@ -92,6 +97,27 @@ namespace CptS321 {
         }
 
         public abstract double Eval();
+        
+        //Deserialization constructor.
+        public ExpNode(SerializationInfo info, StreamingContext ctxt)
+        {
+            //Get the values from info and assign them to the appropriate properties
+            left = (ExpNode)info.GetValue("Left", typeof(ExpNode));
+            left.setParent(this);
+            right = (ExpNode)info.GetValue("Right", typeof(ExpNode));
+            right.setParent(this);
+        }
+        
+        //Serialization function.
+        public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
+        {
+            //You can use any custom name for your name-value pair. But make sure you
+            // read the values with the same name. For ex:- If you write EmpId as "EmployeeId"
+            // then you should read the same with "EmployeeId"
+            info.AddValue("Left", left);
+            info.AddValue("Right", right);
+            info.AddValue("Type", GetType());
+        }
         
     }
 }

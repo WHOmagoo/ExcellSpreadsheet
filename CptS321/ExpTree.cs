@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
+using System.Xml.Serialization;
 using CptS321.Annotations;
 
 namespace CptS321
 {
+    [Serializable]
     public class ExpTree : INotifyPropertyChanged
     {
         private ExpNode root;
@@ -16,8 +20,6 @@ namespace CptS321
         private static string variableNamematch = @"(?<variableName>\w+)";
 
         private Dictionary<string, Value> _variableNodes = new Dictionary<string, Value>();
-        
-
         
         public ExpTree(String expression)
         {
@@ -168,5 +170,25 @@ namespace CptS321
         {
             PropertyChanged?.Invoke(node, new PropertyChangedEventArgs("ValueNode"));
         }
+        
+        //Deserialization constructor.
+        public ExpTree(SerializationInfo info, StreamingContext ctxt)
+        {
+            //Get the values from info and assign them to the appropriate properties
+            expression = (string)info.GetValue("Expression", typeof(string));
+            root = (ExpNode)info.GetValue("EmployeeName", typeof(ExpNode));
+        }
+        
+        //Serialization function.
+        public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
+        {
+            //You can use any custom name for your name-value pair. But make sure you
+            // read the values with the same name. For ex:- If you write EmpId as "EmployeeId"
+            // then you should read the same with "EmployeeId"
+            info.AddValue("Expression", expression);
+            info.AddValue("rootnode", root);
+        }
+        
+        
     }
 }
