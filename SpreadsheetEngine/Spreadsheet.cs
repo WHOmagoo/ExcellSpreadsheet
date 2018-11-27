@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.ComponentModel;
 using System.Data.SqlClient;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
@@ -209,6 +211,11 @@ namespace SpreadsheetEngine
             {
                 Log.Log.getLog().logMessage("***Handler was null in Cell***");
             }
+        }
+
+        public void Save(StreamWriter writer, ImageFormat jpeg)
+        {
+            Console.WriteLine("Saving");
         }
     }
 }

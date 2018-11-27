@@ -98,30 +98,55 @@ namespace Spreadsheet
 
         private void OnOpen(object sender, EventArgs e)
         {
-            
-            FileStream fs = File.OpenRead("./output.test");
-            BinaryFormatter serializer = new BinaryFormatter();
-            _spreadsheet = (SpreadsheetEngine.Spreadsheet) serializer.Deserialize(fs);
-            fs.Close();
-            fs.Dispose();
 
-            InitializeEquationText();
-            InitializeSpreadsheetView();
-            
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.InitialDirectory = ".\\";
+                openFileDialog.Filter = "Spreadsheet files (*.spreadsheet)|*.spreadsheet|All files (*.*)|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    //Get the path of specified file
+                    var filePath = openFileDialog.FileName;
+
+                    //Read the contents of the file into a stream
+                    var fileStream = openFileDialog.OpenFile();
+
+                    using (StreamReader reader = new StreamReader(fileStream))
+                    {
+                        BinaryFormatter serializer = new BinaryFormatter();
+                        _spreadsheet = (SpreadsheetEngine.Spreadsheet) serializer.Deserialize(reader.BaseStream);
+                    }
+                }
+
+                InitializeEquationText();
+                InitializeSpreadsheetView();
+            }
         }
 
         private void OnSaveAs(object sender, EventArgs e)
         {
-            Console.WriteLine("Writing object");
-            FileStream fs = File.OpenWrite("./output.test");
-            BinaryFormatter serializer = new BinaryFormatter();
-            serializer.Serialize(fs, _spreadsheet);
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "Spreadsheet file|*.spreadsheet";
+            saveFileDialog1.Title = "Save a Spreadsheet File";
+            saveFileDialog1.ShowDialog();
 
-            fs.Flush();
-            fs.Close();
-            fs.Dispose();
-            Console.WriteLine("Saving as");
-            
+            if (saveFileDialog1.FileName != "")
+            {
+
+                using (StreamWriter writer = new StreamWriter(saveFileDialog1.OpenFile()))
+                {
+                    
+
+                    Console.WriteLine("Writing object");
+                    BinaryFormatter serializer = new BinaryFormatter();
+                    serializer.Serialize(writer.BaseStream, _spreadsheet);
+                    Console.WriteLine("Saving as");
+                }
+            }
+
         }
 
         private void onCellSelected(object sender, DataGridViewCellEventArgs e)
