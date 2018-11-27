@@ -4,11 +4,14 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.Schema;
 using System.Xml.Serialization;
 using CptS321.Annotations;
 
 namespace CptS321
 {
+
     [Serializable]
     public class ExpTree : INotifyPropertyChanged
     {
@@ -168,27 +171,34 @@ namespace CptS321
         [NotifyPropertyChangedInvocator]
         protected virtual void onVariableNodeChanged(VariableNode node)
         {
-            PropertyChanged?.Invoke(node, new PropertyChangedEventArgs("ValueNode"));
+            PropertyChanged.Invoke(node, new PropertyChangedEventArgs("ValueNode"));
+        }
+
+        private ExpTree()
+        {
+            Console.WriteLine("papa");
         }
         
         //Deserialization constructor.
         public ExpTree(SerializationInfo info, StreamingContext ctxt)
         {
+            Console.WriteLine("Reading exptree");
             //Get the values from info and assign them to the appropriate properties
             expression = (string)info.GetValue("Expression", typeof(string));
-            root = (ExpNode)info.GetValue("EmployeeName", typeof(ExpNode));
+            root = (ExpNode) info.GetValue("Root", typeof(ExpNode));
+            //root = (ExpNode)info.GetValue("RootNode", typeof(ExpNode));
         }
         
         //Serialization function.
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
+            Console.WriteLine("Writing exptree");
             //You can use any custom name for your name-value pair. But make sure you
             // read the values with the same name. For ex:- If you write EmpId as "EmployeeId"
             // then you should read the same with "EmployeeId"
             info.AddValue("Expression", expression);
-            info.AddValue("rootnode", root);
+            info.AddValue("Root", root);
+            //info.AddValue("RootNode", root, root.GetType());
         }
-        
-        
     }
 }

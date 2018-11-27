@@ -22,6 +22,11 @@ namespace CptS321
         {
             return value;
         }
+
+        private Value()
+        {
+            
+        }
         
         //Deserialization constructor.
         public Value(SerializationInfo info, StreamingContext ctxt)

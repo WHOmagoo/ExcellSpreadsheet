@@ -101,22 +101,23 @@ namespace CptS321 {
         //Deserialization constructor.
         public ExpNode(SerializationInfo info, StreamingContext ctxt)
         {
+            Console.WriteLine("Deserialize Data");
             //Get the values from info and assign them to the appropriate properties
             left = (ExpNode)info.GetValue("Left", typeof(ExpNode));
             left.setParent(this);
-            right = (ExpNode)info.GetValue("Right", typeof(ExpNode));
+            right = (ExpNode)info.GetValue("Rightzz", typeof(ExpNode));
             right.setParent(this);
         }
         
         //Serialization function.
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
+            Console.WriteLine("Serializng data");
             //You can use any custom name for your name-value pair. But make sure you
             // read the values with the same name. For ex:- If you write EmpId as "EmployeeId"
             // then you should read the same with "EmployeeId"
             info.AddValue("Left", left);
-            info.AddValue("Right", right);
-            info.AddValue("Type", GetType());
+            info.AddValue("Rightzz", right);
         }
         
     }

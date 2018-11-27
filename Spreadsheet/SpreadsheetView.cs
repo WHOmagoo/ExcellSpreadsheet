@@ -12,6 +12,7 @@ namespace Spreadsheet
         private volatile bool userUpdatedCell = false;
 
         private SpreadsheetEngine.Spreadsheet _spreadsheet;
+        
         public SpreadsheetView(SpreadsheetEngine.Spreadsheet s)
         {
             int rows = s.RowCount;
@@ -42,6 +43,13 @@ namespace Spreadsheet
                 Rows[i].HeaderCell.Value = (i + 1).ToString();
             }
 
+            for (int row = 0; row < _spreadsheet.RowCount; row++)
+            {
+                for (int col = 0; col < _spreadsheet.ColCount; col++)
+                {
+                    Rows[row].Cells[col].Value = _spreadsheet.getCell(col, row).getValue();
+                }
+            }
             
             CellValueChanged += SpreadsheetView_CellValueChanged;
             CellLeave += SpreadsheetView_CellLeft;
@@ -68,7 +76,7 @@ namespace Spreadsheet
                 {
                     var text = Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
 
-                    if (userUpdatedCell)
+                    if (userUpdatedCell && text != null)
                     {
                         userUpdatedCell = false;
                         c.setText(text.ToString());   

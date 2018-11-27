@@ -1,5 +1,8 @@
+using System;
+
 namespace CptS321
 {
+    [Serializable]
     public class NegativeOperator : UnaryOperator
     {   
         public override void add(ExpNode node)

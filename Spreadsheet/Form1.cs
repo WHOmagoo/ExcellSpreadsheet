@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Net.Mime;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using System.Windows.Forms;
 using SpreadsheetEngine;
@@ -19,7 +23,8 @@ namespace Spreadsheet
         private int curCol;
 
         private bool equationChangedByProgram = false;
-        
+        private TableLayoutPanel _layout;
+
         public Form1(String tittle = "")
         {
             Text = tittle;
@@ -29,33 +34,94 @@ namespace Spreadsheet
 
         private void InitializeComponent()
         {
-            TableLayoutPanel layout = new TableLayoutPanel();
-            layout.ColumnCount = 1;
-            layout.RowCount = 2;
+            _layout = new TableLayoutPanel();
+            _layout.ColumnCount = 1;
+            _layout.RowCount = 2;
 
-            layout.Dock = DockStyle.Fill;
+            _layout.Dock = DockStyle.Fill;
             
             Size = new Size(1920, 1080);
+            _spreadsheet = new SpreadsheetEngine.Spreadsheet(50,50);
 
+            InitializeEquationText();
+
+
+            InitializeSpreadsheetView();
+
+            Controls.Add(_layout);
+            
+            var menuStrip = new MenuStrip();
+            menuStrip.Location = new Point(0,0);
+            menuStrip.Name = "MenuStrip";
+            var File = new ToolStripMenuItem();
+            menuStrip.Items.Add(File);
+            File.Name = "File";
+            File.Text = "File";
+            
+            var SaveAs = new ToolStripMenuItem();
+            File.DropDownItems.Add(SaveAs);
+            SaveAs.Name = "SaveAs";
+            SaveAs.Text = "Save As";
+            SaveAs.Click += OnSaveAs;
+            
+            var Open = new ToolStripMenuItem();
+            File.DropDownItems.Add(Open);
+            Open.Name = "Open";
+            Open.Text = "Open";
+            Open.Click += OnOpen;
+            
+            Controls.Add(menuStrip);
+        }
+
+        private void InitializeEquationText()
+        {
+            
+            _layout.Controls.Remove(equationText);
             equationText = new TextBox();
 
             equationText.AutoSize = true;
             equationText.Dock = DockStyle.Fill;
-            
-            _spreadsheet = new SpreadsheetEngine.Spreadsheet(50,50);
-            
+            equationText.TextChanged += OnEquationChange;
+            _layout.Controls.Add(equationText);
+        }
+
+        private void InitializeSpreadsheetView()
+        {
+            _layout.Controls.Remove(_spreadsheetView);
             _spreadsheetView = new SpreadsheetView(_spreadsheet);
 
             _spreadsheetView.Dock = DockStyle.Fill;
 
             _spreadsheetView.CellEnter += onCellSelected;
-            
-            layout.Controls.Add(equationText);
-            layout.Controls.Add(_spreadsheetView);
+            _layout.Controls.Add(_spreadsheetView);
+        }
 
-            equationText.TextChanged += OnEquationChange;
+        private void OnOpen(object sender, EventArgs e)
+        {
             
-            Controls.Add(layout);
+            FileStream fs = File.OpenRead("./output.test");
+            BinaryFormatter serializer = new BinaryFormatter();
+            _spreadsheet = (SpreadsheetEngine.Spreadsheet) serializer.Deserialize(fs);
+            fs.Close();
+            fs.Dispose();
+
+            InitializeEquationText();
+            InitializeSpreadsheetView();
+            
+        }
+
+        private void OnSaveAs(object sender, EventArgs e)
+        {
+            Console.WriteLine("Writing object");
+            FileStream fs = File.OpenWrite("./output.test");
+            BinaryFormatter serializer = new BinaryFormatter();
+            serializer.Serialize(fs, _spreadsheet);
+
+            fs.Flush();
+            fs.Close();
+            fs.Dispose();
+            Console.WriteLine("Saving as");
+            
         }
 
         private void onCellSelected(object sender, DataGridViewCellEventArgs e)

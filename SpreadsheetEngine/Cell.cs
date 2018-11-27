@@ -5,6 +5,7 @@ using CptS321;
 namespace SpreadsheetEngine
 {
     
+    [Serializable]
     public abstract class Cell : INotifyPropertyChanged
     {
         public readonly int RowIndex;

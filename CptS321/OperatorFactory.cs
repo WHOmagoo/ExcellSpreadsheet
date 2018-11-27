@@ -5,17 +5,17 @@ namespace CptS321
 {
     public class OperatorFactory
     {
-        private static Dictionary<string, Type> xmlSymbolToType = new Dictionary<string, Type>()
-        {
-            {"+", typeof(AdditionOperator)},
-            {"-", typeof(SubtractionOperator)},
-            {"/", typeof(DivisionOperator)},
-            {"*", typeof(MultiplicationOperator)},
-            {"(", typeof(ParenthesesOperator)},
-            {")", typeof(ParenthesesOperator)}
-        };
-
-        private static Dictionary<Type, string> typeToXMLSymbol = reverse(xmlSymbolToType);
+//        private static Dictionary<string, Type> xmlSymbolToType = new Dictionary<string, Type>()
+//        {
+//            {"+", typeof(AdditionOperator)},
+//            {"-", typeof(SubtractionOperator)},
+//            {"/", typeof(DivisionOperator)},
+//            {"*", typeof(MultiplicationOperator)},
+//            {"(", typeof(ParenthesesOperator)},
+//            {")", typeof(ParenthesesOperator)}
+//        };
+//
+//        private static Dictionary<Type, string> typeToXMLSymbol = reverse(xmlSymbolToType);
 
         private static Dictionary<A,B> reverse<A,B>(Dictionary<B,A> dic) 
         {

@@ -114,7 +114,7 @@ namespace SpreadsheetEngine
 
         public static string getCellName(Tuple<int, int> coordinates)
         {
-            return $"{Convert(coordinates.Item1)}{coordinates.Item2 + 1}";
+            return String.Format("{0}{1}", Convert(coordinates.Item1), coordinates.Item2 + 1);
         }
     }    
 }

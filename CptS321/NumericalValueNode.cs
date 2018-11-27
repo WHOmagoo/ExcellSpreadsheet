@@ -6,7 +6,7 @@ namespace CptS321
     [Serializable]
     public class NumericalValueNode : ExpNode
     {
-        private Value value;
+        protected Value value;
         
         public NumericalValueNode(Value value = null)
         {

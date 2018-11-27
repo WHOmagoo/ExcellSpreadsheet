@@ -5,11 +5,13 @@ using System.Data;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using CptS321;
 
 namespace SpreadsheetEngine
 {
+    [Serializable]
     public class Spreadsheet
     {
         private int rowCount;
@@ -18,6 +20,7 @@ namespace SpreadsheetEngine
         private Dictionary<Tuple<int, int>, Cell> cells;
         private Dictionary<Cell, List<Cell>> valueLinks;
         
+        [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
         
         public Spreadsheet(int rowCount = 40, int colCount = 40)
@@ -52,6 +55,11 @@ namespace SpreadsheetEngine
             get { return colCount; }
         }
 
+        public Dictionary<Cell, List<Cell>> getValueLinks()
+        {
+            return valueLinks;
+        }
+        
         public Cell getCell(int col, int row)
         {
             Tuple<int, int> key = new Tuple<int, int>(row, col);
@@ -202,6 +210,5 @@ namespace SpreadsheetEngine
                 Log.Log.getLog().logMessage("***Handler was null in Cell***");
             }
         }
-        
     }
 }
