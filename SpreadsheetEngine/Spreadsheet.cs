@@ -142,43 +142,21 @@ namespace SpreadsheetEngine
                 {
                     cell.setValue("ERROR");
                 }
-
-
-//                //TODO refactor this to a class that can evaluate values for equations
-//                string cellContents = cell.getText();
-//
-//                
-////                Regex split = new Regex("([-+*/)/(])");
-////                split.Split(cellContents);
-//                string[] parts = cellContents.Split(',');
-//
-//                try
-//                {
-//                    int colNum = HeaderConverter.Convert(parts[0].Substring(1));
-//                    int rowNum = Int32.Parse(parts[1]);
-//
-//                    Cell copyValue = getCell(colNum, rowNum - 1);
-//
-//                    if (!valueLinks.ContainsKey(copyValue))
-//                    {
-//                        valueLinks.Add(copyValue, new List<Cell>());
-//                    }
-//
-//                    valueLinks[copyValue].Add(cell);
-//                    Log.Log.getLog().logLine("{0} subscribing to {1}", cell, copyValue);
-//                    cell.setValue(copyValue.getValue());
-//                }
-//                catch (Exception error)
-//                {
-//                    cell.setValue("ERROR");
-//                }
             }
             else
             {
-                cell.setValue(cell.getText());
-            }
+                foreach (string name in cell.getSubscribedCellsName())
+                {
+                    Tuple<int, int> location = HeaderConverter.getCellLocation(name);
 
-            //TODO check if the new text is an equation or not and update the value of the cell accordingly
+                    Cell link = getCell(location.Item1, location.Item2);
+
+                    link.PropertyChanged -= cell.onLinkChange;
+                }
+                
+                cell.setExpTree(null);
+            }
+            
             Log.Log.getLog().logMessage("({0},{1}) Text = {2}", cell.ColIndex, cell.RowIndex,
                 cell.getText());
 
@@ -242,21 +220,48 @@ namespace SpreadsheetEngine
             }
             
             reader.ReadStartElement();
-            
-            reader.ReadStartElement("Cells");
 
+            string sCount = reader.GetAttribute("Count");
+            
             cells = new Dictionary<Tuple<int, int>, Cell>();
-            
-            for (int i = 0; i < rowCount * colCount; i++)
-            {
-                Cell cell = new SimpleCell();
-                cell.ReadXml(reader);
 
-                Console.WriteLine("row {0}, col {1}", cell.RowIndex, cell.ColIndex);
+            for (int col = 0; col < colCount; col++)
+            {
+                for (int row = 0; row < rowCount; row++)
+                {
+                    Cell cell = new SimpleCell(row, col);
+                    cells.Add(Tuple.Create<int, int>(row, col), cell);
+                }
+            }
+            
+            int count;
+            
+            if (Int32.TryParse(sCount, out count) && count > 0)
+            {
+                reader.ReadStartElement("Cells");
+            
+                for (int i = 0; i < count; i++)
+                {
+                    if (i >= rowCount * colCount)
+                    {
+                        Console.WriteLine("Were high bois");
+                    }
+                    Cell cell = new SimpleCell();
+                    cell.ReadXml(reader);
                 
-                cells.Add(Tuple.Create<int, int>(cell.RowIndex, cell.ColIndex), cell);
-                cell.PropertyChanged += cellPropertyChanged;
+                    try
+                    {
+                        Cell curCell = cells[Tuple.Create(cell.RowIndex, cell.ColIndex)];
+                        curCell.PropertyChanged += cellPropertyChanged;
+                        curCell.CopyIn(cell);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Failed to load {0}", cell);
+                    }
+                }
                 
+                reader.ReadEndElement();
             }
             
             reader.ReadEndElement();
@@ -284,10 +289,26 @@ namespace SpreadsheetEngine
             writer.WriteAttributeString("RowCount", rowCount.ToString());
             
             writer.WriteStartElement("Cells");
+            
+            List<Cell> cellsList = new List<Cell>();
+
             foreach (var key in cells.Keys)
             {
-                cells[key].WriteXml(writer);
+                Cell curCell = cells[key];
+
+                if (curCell.hasData())
+                {
+                    cellsList.Add(curCell);   
+                }
             }
+            
+            writer.WriteAttributeString("Count", cellsList.Count.ToString());
+            
+            foreach (var cell in cellsList)
+            {
+                cell.WriteXml(writer);
+            }
+            writer.WriteEndElement();
             writer.WriteEndElement();
             
 //            writer.WriteStartElement("ValueLinks");
@@ -313,7 +334,6 @@ namespace SpreadsheetEngine
 //            }
 //            
 //            writer.WriteEndElement();
-            writer.WriteEndElement();
         }
     }
 }

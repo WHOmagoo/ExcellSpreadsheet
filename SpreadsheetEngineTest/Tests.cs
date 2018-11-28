@@ -15,7 +15,6 @@ namespace SpreadsheetEngineTest
             
             Assert.True(c.RowIndex == 4);
             Assert.True(c.ColIndex == 9);
-            Assert.True(c.works());
         }
 
         [Test]

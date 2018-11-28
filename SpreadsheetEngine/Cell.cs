@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml;
 using System.Xml.Schema;
@@ -23,7 +24,8 @@ namespace SpreadsheetEngine
 
         public Cell()
         {
-            
+            Text = "";
+            Value = "";
         }
         
         public Cell(int col, int row)
@@ -35,19 +37,43 @@ namespace SpreadsheetEngine
             Value = "";
         }
 
+        public List<string> getSubscribedCellsName()
+        {
+            if (!ReferenceEquals(expressionTree, null))
+            {
+                return expressionTree.getVariableNames();
+            }
+            
+            return new List<string>();
+        }
+
+        public bool hasData()
+        {
+            return !string.Equals(String.Empty, getText()) ||
+                   !string.Equals(String.Empty, getValue()) ||
+                   !ReferenceEquals(null, expressionTree);
+        } 
+        
         public string getText()
         {
             return Text;
         }
 
-        public void setExpTree(ExpTree newExpTree)
+        protected internal void setExpTree(ExpTree newExpTree)
         {
             expressionTree = newExpTree;
 
             try
             {
-               setValue(expressionTree.Eval().ToString());
-                
+                if (!ReferenceEquals(expressionTree, null))
+                {
+                    setValue(expressionTree.Eval().ToString());
+                }
+                else
+                {
+                    setValue(Text);
+                }
+
             }
             catch (Exception e)
             {
@@ -59,6 +85,10 @@ namespace SpreadsheetEngine
 
         public void setText(string newText)
         {
+            if (newText == null)
+            {
+                newText = "";
+            }
             if (!string.Equals(newText, Text))
             {
                 Text = newText;
@@ -103,6 +133,10 @@ namespace SpreadsheetEngine
 
         internal void setValue(string newValue)
         {
+            if (newValue == null)
+            {
+                newValue = "";
+            }
             if (!string.Equals(Value, newValue))
             {
                 Value = newValue;
@@ -187,6 +221,15 @@ namespace SpreadsheetEngine
 
             writer.WriteEndElement();
             
+        }
+
+        public void CopyIn(Cell cell)
+        {
+            RowIndex = cell.RowIndex;
+            ColIndex = cell.ColIndex;
+            setText(cell.Text);
+            setValue(cell.Value);
+            setExpTree(expressionTree = cell.expressionTree);
         }
     }
 }
