@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml;
 using System.Xml.Serialization;
 using CptS321;
 using NUnit.Framework;
@@ -78,6 +79,34 @@ namespace SerializationTest
         }
 
         [Test]
+        public void TestComplexVariableNodesPreset()
+        {
+            ExpTree expTree = new ExpTree("((A1+A2)*(A3-A2))*(A4/A2)");
+            expTree.SetVar("A1", 1);
+            expTree.SetVar("A2", 2);
+            expTree.SetVar("A3", 3);
+            expTree.SetVar("A4", 4);
+            ExpTree newExpTree = serializeAndReload(expTree);
+            Assert.AreEqual(expTree.Eval(), newExpTree.Eval());
+        }
+        
+        [Test]
+        public void TestComplexVariableNodesUnset()
+        {
+            ExpTree expTree = new ExpTree("((A1+A2)*(A3-A2))*(A4/A2)");
+            ExpTree newExpTree = serializeAndReload(expTree);
+            expTree.SetVar("A1", 1);
+            expTree.SetVar("A2", 2);
+            expTree.SetVar("A3", 3);
+            expTree.SetVar("A4", 4);
+            newExpTree.SetVar("A1", 1);
+            newExpTree.SetVar("A2", 2);
+            newExpTree.SetVar("A3", 3);
+            newExpTree.SetVar("A4", 4);
+            Assert.AreEqual(expTree.Eval(), newExpTree.Eval());
+        }
+
+        [Test]
         public void TestSimpleVariableNode()
         {
             ExpTree expTree = new ExpTree("A1");
@@ -120,20 +149,19 @@ namespace SerializationTest
             }
         }
 
-        private T serializeAndReload<T>(T oldObj)
+        private T serializeAndReload<T>(T oldObj) where T : IXmlSerializable, new()
         {
             MemoryStream stream = new MemoryStream();
             
-            BinaryFormatter serializer = new BinaryFormatter();
-//            XmlSerializer serializer = new XmlSerializer(tree.GetType());
+//            BinaryFormatter serializer = new BinaryFormatter();
+            using (XmlWriter writer = XmlWriter.Create(stream))
+            {
+                writer.WriteStartDocument();
+                oldObj.WriteXml(writer);            
+                writer.WriteEndDocument();
+            }
 
-            serializer.Serialize(stream, oldObj);
-            
             stream.Flush();
-
-            stream.Position = 0;
-            
-            T newExpTree = (T) serializer.Deserialize(stream);
 
             stream.Position = 0;
             
@@ -141,6 +169,18 @@ namespace SerializationTest
             string result = sw.ReadToEnd();
 
             Console.WriteLine(result);
+            
+            stream.Position = 0;
+
+            T newExpTree;
+            using (XmlReader reader = XmlReader.Create(stream))
+            {
+                newExpTree = new T();
+                newExpTree.ReadXml(reader);
+            }
+//            serializer.Serialize(stream, oldObj);
+
+
 
             return newExpTree;
         }

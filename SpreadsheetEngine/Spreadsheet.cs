@@ -9,21 +9,27 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 using CptS321;
 
 namespace SpreadsheetEngine
 {
-    [Serializable]
-    public class Spreadsheet
+    public class Spreadsheet : IXmlSerializable
     {
         private int rowCount;
         private int colCount;
         
         private Dictionary<Tuple<int, int>, Cell> cells;
-        private Dictionary<Cell, List<Cell>> valueLinks;
+        //private Dictionary<Cell, List<Cell>> valueLinks;
         
-        [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public Spreadsheet()
+        {
+            
+        }
         
         public Spreadsheet(int rowCount = 40, int colCount = 40)
         {
@@ -32,7 +38,7 @@ namespace SpreadsheetEngine
 
             cells = new Dictionary<Tuple<int, int>, Cell>();
             
-            valueLinks = new Dictionary<Cell, List<Cell>>();
+            //valueLinks = new Dictionary<Cell, List<Cell>>();
             
             for (int row = 0; row < rowCount; row++)
             {
@@ -56,11 +62,6 @@ namespace SpreadsheetEngine
         {
             get { return colCount; }
         }
-
-        public Dictionary<Cell, List<Cell>> getValueLinks()
-        {
-            return valueLinks;
-        }
         
         public Cell getCell(int col, int row)
         {
@@ -68,7 +69,7 @@ namespace SpreadsheetEngine
             if (cells.ContainsKey(key))
             {
                 
-                 Cell cell = cells[key];
+                Cell cell = cells[key];
                 Log.Log.getLog().logLine("Sending {0} from input ({1},{2}).", cell, row, col);
                 return cell;
             }
@@ -122,7 +123,7 @@ namespace SpreadsheetEngine
 
                         try
                         {
-                            int value = Int32.Parse(link.getValue());
+                            double value = Double.Parse(link.getValue());
 
                             expressionTree.SetVar(name, value);
                         }
@@ -187,14 +188,14 @@ namespace SpreadsheetEngine
         private void OnValueChangedEvent(Cell cell)
         {
             Log.Log.getLog().logLine("{0}'s value was changed to {1}", cell, cell.getValue());
-            if (valueLinks.ContainsKey(cell))
-            {
-                foreach (var cellLinked in valueLinks[cell])
-                {
-                    Log.Log.getLog().logLine("Updating {0}'s value from {1}", cellLinked, cell);
-                    cellLinked.setValue(cell.getValue());
-                }
-            }
+//            if (valueLinks.ContainsKey(cell))
+//            {
+//                foreach (var cellLinked in valueLinks[cell])
+//                {
+//                    Log.Log.getLog().logLine("Updating {0}'s value from {1}", cellLinked, cell);
+//                    cellLinked.setValue(cell.getValue());
+//                }
+//            }
             
             OnPropertyChanged(cell, "Value");
         }
@@ -216,6 +217,103 @@ namespace SpreadsheetEngine
         public void Save(StreamWriter writer, ImageFormat jpeg)
         {
             Console.WriteLine("Saving");
+        }
+
+        public XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            reader.MoveToContent();
+            string sColCount = reader.GetAttribute("ColCount");
+            string sRowCount = reader.GetAttribute("RowCount");
+
+            try
+            {
+                colCount = Int32.Parse(sColCount);
+                rowCount = Int32.Parse(sRowCount);
+            }
+            catch
+            {
+                Console.WriteLine("Row count or Col count not specified in xml");
+                return;
+            }
+            
+            reader.ReadStartElement();
+            
+            reader.ReadStartElement("Cells");
+
+            cells = new Dictionary<Tuple<int, int>, Cell>();
+            
+            for (int i = 0; i < rowCount * colCount; i++)
+            {
+                Cell cell = new SimpleCell();
+                cell.ReadXml(reader);
+
+                Console.WriteLine("row {0}, col {1}", cell.RowIndex, cell.ColIndex);
+                
+                cells.Add(Tuple.Create<int, int>(cell.RowIndex, cell.ColIndex), cell);
+                cell.PropertyChanged += cellPropertyChanged;
+                
+            }
+            
+            reader.ReadEndElement();
+
+//            string sCount = reader.GetAttribute("Count");
+//            reader.ReadStartElement("ValueLinks");
+//
+//            int linksCount;
+//            if(Int32.TryParse(sCount, out linksCount))
+//            {
+//
+//                reader.ReadStartElement("LinkOrigin");
+//                //.ReadAttributeValue("Col");
+//                for (int i = 0; i < linksCount; i++)
+//                {
+//                    int valuesCount;
+//                }
+//            }
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            writer.WriteStartElement("Spreadsheet");
+            writer.WriteAttributeString("ColCount", colCount.ToString());
+            writer.WriteAttributeString("RowCount", rowCount.ToString());
+            
+            writer.WriteStartElement("Cells");
+            foreach (var key in cells.Keys)
+            {
+                cells[key].WriteXml(writer);
+            }
+            writer.WriteEndElement();
+            
+//            writer.WriteStartElement("ValueLinks");
+//            writer.WriteAttributeString("Count", valueLinks.Count.ToString());
+//
+//            foreach (Cell key in valueLinks.Keys)
+//            {
+//                writer.WriteStartElement("LinkOrigin");
+//                writer.WriteAttributeString("Col", key.ColIndex.ToString());
+//                writer.WriteAttributeString("Row", key.RowIndex.ToString());
+//                writer.WriteAttributeString("LinksCount", valueLinks[key].Count.ToString());
+//
+//                foreach (Cell destination in valueLinks[key])
+//                {
+//                    writer.WriteStartElement("DestinationCell");
+//                    writer.WriteAttributeString("Col", destination.ColIndex.ToString());
+//                    writer.WriteAttributeString("Row", destination.RowIndex.ToString());
+//                    writer.WriteEndElement();
+//                }
+//                
+//                writer.WriteEndElement();
+//                
+//            }
+//            
+//            writer.WriteEndElement();
+            writer.WriteEndElement();
         }
     }
 }

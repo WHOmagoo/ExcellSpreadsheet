@@ -1,13 +1,13 @@
 using System;
 using System.Runtime.Serialization;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace CptS321 {
     
-    [Serializable]
     public abstract class ExpNode
-    {
-        protected string varName;
-        
+    {   
         private int prescedence;
 
         protected ExpNode()
@@ -18,41 +18,9 @@ namespace CptS321 {
             parent = null;
         }
 
-        public ExpNode left {private set; get;}
-        public ExpNode right {private set; get;}
-        public ExpNode parent {private set; get;}
-
-//        public ExpNode left
-//        {
-//            get { return _left; }
-//            private set { _left = value; }
-//        }
-//        
-//        public ExpNode right
-//        {
-//            get { return _right; }
-//            private set { _right = value; }
-//        }
-//        
-//        public ExpNode parent
-//        {
-//            get { return _parent; }
-//            private set { _parent = value; }
-//        }
-
-        public virtual void SetVar(string varName, double varValue)
-        {
-            if (left != null)
-            {
-                left.SetVar(varName, varValue);
-            }
-
-            if (right != null)
-            {
-
-                right.SetVar(varName, varValue);
-            }
-        }
+        protected ExpNode left;
+        protected ExpNode right;
+        protected ExpNode parent;
 
         public int getPrescedence()
         {
@@ -97,28 +65,9 @@ namespace CptS321 {
         }
 
         public abstract double Eval();
-        
-        //Deserialization constructor.
-        public ExpNode(SerializationInfo info, StreamingContext ctxt)
+        public XmlSchema GetSchema()
         {
-            Console.WriteLine("Deserialize Data");
-            //Get the values from info and assign them to the appropriate properties
-            left = (ExpNode)info.GetValue("Left", typeof(ExpNode));
-            left.setParent(this);
-            right = (ExpNode)info.GetValue("Rightzz", typeof(ExpNode));
-            right.setParent(this);
+            return null;
         }
-        
-        //Serialization function.
-        public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
-        {
-            Console.WriteLine("Serializng data");
-            //You can use any custom name for your name-value pair. But make sure you
-            // read the values with the same name. For ex:- If you write EmpId as "EmployeeId"
-            // then you should read the same with "EmployeeId"
-            info.AddValue("Left", left);
-            info.AddValue("Rightzz", right);
-        }
-        
     }
 }

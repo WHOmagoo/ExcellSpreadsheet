@@ -2,7 +2,6 @@ using System;
 
 namespace CptS321
 {
-    [Serializable]
     public class MultiplicationOperator : BinaryOperator
     {
 

@@ -3,7 +3,6 @@ using System.Security.Policy;
 
 namespace CptS321
 {
-    [Serializable]
     public class ParenthesesOperator : UnaryOperator
     {
         private readonly bool IsClosingParenthesis;

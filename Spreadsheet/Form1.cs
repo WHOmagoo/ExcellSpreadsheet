@@ -7,6 +7,7 @@ using System.Net.Mime;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using System.Windows.Forms;
+using System.Xml;
 using SpreadsheetEngine;
 using Spreadsheet = SpreadsheetEngine.Spreadsheet;
 
@@ -43,7 +44,7 @@ namespace Spreadsheet
             _layout.Dock = DockStyle.Fill;
             
             Size = new Size(1920, 1080);
-            _spreadsheet = new SpreadsheetEngine.Spreadsheet(50,50);
+            _spreadsheet = new SpreadsheetEngine.Spreadsheet(5,5);
 
             InitializeEquationText();
 
@@ -123,16 +124,14 @@ namespace Spreadsheet
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    //Get the path of specified file
-                    var filePath = openFileDialog.FileName;
-
                     //Read the contents of the file into a stream
                     var fileStream = openFileDialog.OpenFile();
 
-                    using (StreamReader reader = new StreamReader(fileStream))
+                    using (StreamReader stream = new StreamReader(fileStream))
                     {
-                        BinaryFormatter serializer = new BinaryFormatter();
-                        _spreadsheet = (SpreadsheetEngine.Spreadsheet) serializer.Deserialize(reader.BaseStream);
+                        XmlReader reader = XmlReader.Create(stream);
+                        _spreadsheet = new SpreadsheetEngine.Spreadsheet();
+                        _spreadsheet.ReadXml(reader);
                     }
                 }
 
@@ -151,14 +150,18 @@ namespace Spreadsheet
             if (saveFileDialog1.FileName != "")
             {
 
-                using (StreamWriter writer = new StreamWriter(saveFileDialog1.OpenFile()))
+                using (StreamWriter stream = new StreamWriter(saveFileDialog1.OpenFile()))
                 {
                     
 
                     Console.WriteLine("Writing object");
-                    BinaryFormatter serializer = new BinaryFormatter();
-                    serializer.Serialize(writer.BaseStream, _spreadsheet);
-                    Console.WriteLine("Saving as");
+                    using (XmlWriter writer = XmlWriter.Create(stream))
+                    {
+                        writer.WriteStartDocument();
+                        _spreadsheet.WriteXml(writer);
+                        writer.WriteEndDocument();
+                        Console.WriteLine("Saving as");
+                    }
                 }
             }
 

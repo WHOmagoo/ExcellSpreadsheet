@@ -2,8 +2,6 @@ using System;
 
 namespace CptS321
 {
-    [Serializable]
-
     public class DivisionOperator : BinaryOperator
     {
         public override double Eval()

@@ -15,7 +15,6 @@ namespace ExpressionTreeTest
             Assert.AreEqual(2, new ExpTree("8/4").Eval());
             
         }
-        
 
         [Test]
         public void TestExpTreeVariable()
@@ -91,6 +90,41 @@ namespace ExpressionTreeTest
         {
             ExpTree exp = new ExpTree("((1+2)*(3-2))*(4/2)");
             Assert.AreEqual(6, exp.Eval());
+        }
+
+        [Test]
+        public void TestDoubleComplex()
+        {
+            ExpTree exp = new ExpTree("((1.1+2.2)*(3.1415-2.8))*(4.5/1.5)");
+            Assert.AreEqual(((1.1+2.2)*(3.1415-2.8))*(4.5/1.5), exp.Eval());
+        }
+
+        [Test]
+        public void TestDoubleWithNegative()
+        {
+            ExpTree exp = new ExpTree("-2.31");
+            Assert.AreEqual(-2.31, exp.Eval());
+        }
+        
+        [Test]
+        public void TestDoubleWithNegativeNoLeadingDigit()
+        {
+            ExpTree exp = new ExpTree("-.31");
+            Assert.AreEqual(-.31, exp.Eval());
+        }
+        
+        [Test]
+        public void TestDoubleWithNegativeNoTrailingDigit()
+        {
+            ExpTree exp = new ExpTree("-3.");
+            Assert.AreEqual(-3, exp.Eval());
+        }
+        
+        [Test]
+        public void TestDoubleWithNegativeNoTrailingDigitAdded()
+        {
+            ExpTree exp = new ExpTree("-3.+2.1");
+            Assert.AreEqual(-3+2.1, exp.Eval());
         }
     }
 }

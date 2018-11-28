@@ -2,8 +2,6 @@ using System;
 
 namespace CptS321
 {
-    
-    [Serializable]
     public abstract class BinaryOperator : Operator
     {
 
