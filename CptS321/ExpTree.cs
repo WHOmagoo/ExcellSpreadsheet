@@ -234,7 +234,11 @@ namespace CptS321
                 }
             }
 
-            reader.ReadEndElement();
+            if (count > 0)
+            {
+                reader.ReadEndElement();
+            }
+
             reader.ReadEndElement();
         }
 
