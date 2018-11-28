@@ -76,9 +76,13 @@ namespace Spreadsheet
                 {
                     var text = Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
 
-                    if (userUpdatedCell && text != null)
+                    if (userUpdatedCell)
                     {
                         userUpdatedCell = false;
+                        if (text == null)
+                        {
+                            text = "";
+                        }
                         c.setText(text.ToString());   
                     }
                 }

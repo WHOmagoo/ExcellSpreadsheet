@@ -153,7 +153,6 @@ namespace Spreadsheet
                 using (StreamWriter stream = new StreamWriter(saveFileDialog1.OpenFile()))
                 {
                     
-
                     Console.WriteLine("Writing object");
                     using (XmlWriter writer = XmlWriter.Create(stream))
                     {
