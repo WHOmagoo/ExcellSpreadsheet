@@ -44,7 +44,7 @@ namespace Spreadsheet
             _layout.Dock = DockStyle.Fill;
             
             Size = new Size(1920, 1080);
-            _spreadsheet = new SpreadsheetEngine.Spreadsheet(5,5);
+            _spreadsheet = new SpreadsheetEngine.Spreadsheet(50,50);
 
             InitializeEquationText();
 
