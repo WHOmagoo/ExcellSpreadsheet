@@ -52,7 +52,8 @@ namespace Spreadsheet
             }
             
             CellValueChanged += SpreadsheetView_CellValueChanged;
-            CellLeave += SpreadsheetView_CellLeft;
+//            CellLeave += SpreadsheetView_CellLeft;
+            CellEndEdit += SpreadsheetView_CellLeft;
             _spreadsheet.PropertyChanged += SpreadsheetView_SpreadsheetCellUpdated;
             
         }
