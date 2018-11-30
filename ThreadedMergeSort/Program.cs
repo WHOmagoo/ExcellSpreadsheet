@@ -14,42 +14,32 @@ namespace ThreadedMergeSort
 
         public static void Main(string[] args)
         {
-
-            TimeSpan threaded2TotalTime = TimeSpan.Zero;
-            TimeSpan threaded4TotalTime = TimeSpan.Zero;
-            TimeSpan threaded8TotalTime = TimeSpan.Zero;
-            TimeSpan unthreadedTotalTime = TimeSpan.Zero;
-            TimeSpan unlimitedThreadsTotalTime = TimeSpan.Zero;
+            
             
             int testsCount = 2048;
             int maxSize = 1 << 12;
             
             int[] list = new int[maxSize];
 
+            Console.WriteLine("Processor Count = {0}", Environment.ProcessorCount);
+            
             for (int size = 8; size <= maxSize; size <<= 1)
             {
+                Console.WriteLine("Size {0} statistics", size);
 
-                for (int azz = 0; azz < testsCount; azz++)
+                for (int threads = 1; threads <= Environment.ProcessorCount << 2; threads <<= 1)
                 {
-                    randomizeItems(list, size);
-                    threaded2TotalTime += timeFunciton(() => threadedMergeSortMaxThreads(list, 0, size, 2));
+                    TimeSpan totalRunTime = TimeSpan.Zero;
+                    TimeSpan totalRunTimeThreadedMerge = TimeSpan.Zero;
+                    for (int numberOfTests = 0; numberOfTests < testsCount; numberOfTests++)
+                    {
+                        randomizeItems(list, size);
+                        totalRunTime += timeFunciton(() => threadedMergeSortMaxThreads(list, 0, size, threads));
+                    }
                     
-                    randomizeItems(list, size);
-                    threaded4TotalTime += timeFunciton(() => threadedMergeSortMaxThreads(list, 0, size, 4));
-                    
-                    randomizeItems(list, size);
-                    threaded8TotalTime += timeFunciton(() => threadedMergeSortMaxThreads(list, 0, size, 8));
-
-                    randomizeItems(list, size);
-                    unthreadedTotalTime += timeFunciton(() => basicMergeSort(list, 0, size)); 
+                    Console.WriteLine("{0} simultaneous threads. Average time was {1:n0} ticks", threads, totalRunTime.Ticks / testsCount);
                 }
 
-                Console.WriteLine("Size 0x{0:X} Finished", size);
-                Console.WriteLine("Unthreaded average time was {0:n0} ticks", unthreadedTotalTime.Ticks / testsCount);
-                Console.WriteLine("2 threads average time was {0:n0} ticks", threaded2TotalTime.Ticks / testsCount);
-                Console.WriteLine("4 threads average time was {0:n0} ticks", threaded4TotalTime.Ticks / testsCount);
-                Console.WriteLine("8 threads average time was {0:n0} ticks", threaded8TotalTime.Ticks / testsCount);
-//                Console.WriteLine("Unlimited thread average time was {0}ms", unlimitedThreadsTotalTime.Ticks / testsCount);
                 Console.WriteLine();
             }
 
@@ -108,16 +98,15 @@ namespace ThreadedMergeSort
 
 
         }
-
+        
         public static void threadedMergeSortMaxThreads(int[] list, int startingIndex, int size, int threads)
-        {
-//            ParameterizedThreadStart leftP = new ParameterizedThreadStart(threadedMergeSort));
+        {   
             if (size == 1)
             {
                 return;
             }
 
-            if (threads <= 0)
+            if (threads < 2)
             {
                 basicMergeSort(list, startingIndex, size / 2);
                 basicMergeSort(list, startingIndex + size / 2, size % 2 == 0? size / 2 : size / 2 + 1);   
@@ -126,9 +115,9 @@ namespace ThreadedMergeSort
             {
                 
                 Parallel.Invoke(
-                    () => threadedMergeSortMaxThreads(list, startingIndex, size / 2, threads - 2),
+                    () => threadedMergeSortMaxThreads(list, startingIndex, size / 2, threads >> 1),
                     () => threadedMergeSortMaxThreads(list, startingIndex + size / 2,
-                        size % 2 == 0 ? size / 2 : size / 2 + 1, threads - 2));
+                        size % 2 == 0 ? size / 2 : size / 2 + 1, threads >> 1));
             }
 
             mergeTwoLists(list, startingIndex, startingIndex + (size % 2 == 0 ? size / 2 : size / 2 + 1));
@@ -169,13 +158,13 @@ namespace ThreadedMergeSort
             }
         }
 
-        public static bool isSorted(int[] list)
+        public static bool isSorted(int[] list, int size)
         {
 
             int prev = list[0];
-            foreach (var item in list)
+            for (int i = 0; i < size; i++)
             {
-                if (prev > item)
+                if (prev > list[i])
                 {
                     return false;
                 }
