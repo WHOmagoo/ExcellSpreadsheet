@@ -1,63 +1,82 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Deployment.Internal;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace ThreadedMergeSort
 {
     internal class Program
     {
+        private static Random _random = new Random();
+
         public static void Main(string[] args)
         {
-            for (int azz = 0; azz < 2048; azz++)
+
+            TimeSpan threaded2TotalTime = TimeSpan.Zero;
+            TimeSpan threaded4TotalTime = TimeSpan.Zero;
+            TimeSpan threaded8TotalTime = TimeSpan.Zero;
+            TimeSpan unthreadedTotalTime = TimeSpan.Zero;
+            TimeSpan unlimitedThreadsTotalTime = TimeSpan.Zero;
+            
+            int testsCount = 2048;
+            int maxSize = 1 << 12;
+            
+            int[] list = new int[maxSize];
+
+            for (int size = 8; size <= maxSize; size <<= 1)
             {
-                for (int size = 2; size <= 2048; size <<= 1)
+
+                for (int azz = 0; azz < testsCount; azz++)
                 {
-                    List<int> toSort = generateRandomizedList(size);
+                    randomizeItems(list, size);
+                    threaded2TotalTime += timeFunciton(() => threadedMergeSortMaxThreads(list, 0, size, 2));
+                    
+                    randomizeItems(list, size);
+                    threaded4TotalTime += timeFunciton(() => threadedMergeSortMaxThreads(list, 0, size, 4));
+                    
+                    randomizeItems(list, size);
+                    threaded8TotalTime += timeFunciton(() => threadedMergeSortMaxThreads(list, 0, size, 8));
 
-//            List<int> toSort = new List<int>(vals);
-
-//            toSort.Add(2);
-//            toSort.Add(1);
-//            toSort.Add(3);
-//            toSort.Add(5);
-//            toSort.Add(8);
-//            toSort.Add(4);
-//            toSort.Add(6);
-//            toSort.Add(7);
-
-//            printList(toSort);
-
-//                Console.WriteLine("Sorted");
-                    basicMergeSort(toSort, 0, toSort.Count);
-
-//            printList(toSort);
-                    if (!isSorted(toSort))
-                    {
-                        Console.WriteLine("Size {0:D4} is not sorted", size);
-                        printList(toSort);
-
-                    }
+                    randomizeItems(list, size);
+                    unthreadedTotalTime += timeFunciton(() => basicMergeSort(list, 0, size)); 
                 }
+
+                Console.WriteLine("Size 0x{0:X} Finished", size);
+                Console.WriteLine("Unthreaded average time was {0:n0} ticks", unthreadedTotalTime.Ticks / testsCount);
+                Console.WriteLine("2 threads average time was {0:n0} ticks", threaded2TotalTime.Ticks / testsCount);
+                Console.WriteLine("4 threads average time was {0:n0} ticks", threaded4TotalTime.Ticks / testsCount);
+                Console.WriteLine("8 threads average time was {0:n0} ticks", threaded8TotalTime.Ticks / testsCount);
+//                Console.WriteLine("Unlimited thread average time was {0}ms", unlimitedThreadsTotalTime.Ticks / testsCount);
+                Console.WriteLine();
             }
 
         }
 
-        public static List<int> generateRandomizedList(int size)
+        public static TimeSpan timeFunciton(Action action)
         {
-            List<int> result = new List<int>(size);
+            Stopwatch timer = Stopwatch.StartNew();
 
-            Random random = new Random();
-            
-            
-            for (; size > 0; size--)
-            {
-                result.Add(random.Next(Int32.MaxValue));
-            }
+            action();
 
-            return result;
+            timer.Stop();
+            
+            return timer.Elapsed;
         }
 
-        public static void printList(List<int> list)
+        public static void randomizeItems(int[] list, int size)
+        {
+            
+            while(0 < size)
+            {
+                size--;
+                list[size] = _random.Next(Int32.MaxValue);
+            }
+        }
+
+        public static void printList(int[] list)
         {
             int i = 0;
             foreach (var item in list)
@@ -72,7 +91,7 @@ namespace ThreadedMergeSort
             }   
         }
 
-        public static void basicMergeSort(List<int> list, int startingIndex, int size)
+        public static void basicMergeSort(int[] list, int startingIndex, int size)
         {
             if (size == 1)
             {
@@ -82,10 +101,61 @@ namespace ThreadedMergeSort
             basicMergeSort(list, startingIndex, size / 2);
             basicMergeSort(list, startingIndex + size / 2, size % 2 == 0? size / 2 : size / 2 + 1);
 
-            int leftStart = startingIndex;
-            int rightStart = startingIndex + (size % 2 == 0 ? size / 2 : size / 2 + 1);
+//            int leftStart = startingIndex;
+//            int rightStart = startingIndex + (size % 2 == 0 ? size / 2 : size / 2 + 1);
+
+            mergeTwoLists(list, startingIndex, startingIndex + (size % 2 == 0 ? size / 2 : size / 2 + 1));
+
+
+        }
+
+        public static void threadedMergeSortMaxThreads(int[] list, int startingIndex, int size, int threads)
+        {
+//            ParameterizedThreadStart leftP = new ParameterizedThreadStart(threadedMergeSort));
+            if (size == 1)
+            {
+                return;
+            }
+
+            if (threads <= 0)
+            {
+                basicMergeSort(list, startingIndex, size / 2);
+                basicMergeSort(list, startingIndex + size / 2, size % 2 == 0? size / 2 : size / 2 + 1);   
+            }
+            else
+            {
+                
+                Parallel.Invoke(
+                    () => threadedMergeSortMaxThreads(list, startingIndex, size / 2, threads - 2),
+                    () => threadedMergeSortMaxThreads(list, startingIndex + size / 2,
+                        size % 2 == 0 ? size / 2 : size / 2 + 1, threads - 2));
+            }
+
+            mergeTwoLists(list, startingIndex, startingIndex + (size % 2 == 0 ? size / 2 : size / 2 + 1));
             
-            for (int i = 0; i < size && leftStart - startingIndex  < size / 2 && rightStart - startingIndex < size; i++)
+        }
+        
+        public static void threadedMergeSortUnlimitedThreads(int[] list, int startingIndex, int size)
+        {
+//            ParameterizedThreadStart leftP = new ParameterizedThreadStart(threadedMergeSort));
+            if (size == 1)
+            {
+                return;
+            }
+                
+            Parallel.Invoke(
+                () => threadedMergeSortUnlimitedThreads(list, startingIndex, size / 2),
+                () => threadedMergeSortUnlimitedThreads(list, startingIndex + size / 2,
+                    size % 2 == 0 ? size / 2 : size / 2 + 1));
+
+            mergeTwoLists(list, startingIndex, startingIndex + (size % 2 == 0 ? size / 2 : size / 2 + 1));
+            
+        }
+
+        //Assumes that leftStart is lower than rightStart and that the lists are in adjacent in memory
+        public static void mergeTwoLists(int[] list, int leftStart, int rightStart)
+        {
+            for (int i = rightStart - leftStart; i > 0; i--)
             {
                 if (list[leftStart] > list[rightStart])
                 {
@@ -99,7 +169,7 @@ namespace ThreadedMergeSort
             }
         }
 
-        public static bool isSorted(List<int> list)
+        public static bool isSorted(int[] list)
         {
 
             int prev = list[0];
